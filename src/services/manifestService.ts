@@ -1,11 +1,13 @@
 import type { PageManifest } from "../types/manifest";
 import { signupManifest } from "../manifests/signupManifest";
 import { signinManifest } from "../manifests/signinManifest";
+import { comprehensiveTestManifest } from "../manifests/comprehensiveTestManifest";
 
 // Local manifest cache
 const LOCAL_MANIFESTS: Record<string, PageManifest> = {
   signup: signupManifest,
   signin: signinManifest,
+  "comprehensive-test": comprehensiveTestManifest,
 };
 
 export interface ManifestServiceConfig {
@@ -157,7 +159,11 @@ export class ManifestService {
    */
   clearCache(): void {
     Object.keys(LOCAL_MANIFESTS).forEach((key) => {
-      if (key !== "signup" && key !== "signin") {
+      if (
+        key !== "signup" &&
+        key !== "signin" &&
+        key !== "comprehensive-test"
+      ) {
         delete LOCAL_MANIFESTS[key];
       }
     });

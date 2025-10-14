@@ -76,6 +76,7 @@ export const signupManifest: PageManifest = {
       },
       precision: 0,
       defaultValue: 18,
+      clearable: false,
     },
     {
       id: "gender",

@@ -44,27 +44,17 @@ const HomePage: React.FC = () => {
               </Link>
 
               <Link
-                to="/page/signup"
+                to="/comprehensive-test"
                 className="submit-button"
                 style={{
                   textDecoration: "none",
                   textAlign: "center",
                   display: "block",
+                  background:
+                    "linear-gradient(135deg, #28a745 0%, #20c997 100%)",
                 }}
               >
-                🔧 Generic Signup (via manifest ID)
-              </Link>
-
-              <Link
-                to="/page/signin"
-                className="submit-button"
-                style={{
-                  textDecoration: "none",
-                  textAlign: "center",
-                  display: "block",
-                }}
-              >
-                🔧 Generic Signin (via manifest ID)
+                🧪 Comprehensive Widget Test
               </Link>
             </div>
           </div>
@@ -75,27 +65,26 @@ const HomePage: React.FC = () => {
               style={{ textAlign: "left", color: "#4a5568", lineHeight: "1.6" }}
             >
               <p>
-                <strong>1. Manifest Definition:</strong> Pages are defined using
-                JSON-like manifests that specify fields, layout, validation, and
-                styling.
+                <strong>1. Pure Dynamic:</strong> No static pages exist. All
+                pages are generated dynamically from manifest configurations at
+                runtime.
               </p>
 
               <p>
-                <strong>2. Dynamic Rendering:</strong> The DynamicPageEngine
-                component reads manifests and automatically generates complete,
-                interactive forms.
+                <strong>2. URL-Based Loading:</strong> Simply visit /
+                {`{manifestId}`} to load any manifest. The system automatically
+                fetches and renders the page.
               </p>
 
               <p>
-                <strong>3. External AI Integration:</strong> Manifests can be
-                fetched from external APIs, allowing AI to generate pages
-                on-demand.
+                <strong>3. AI-Ready:</strong> External AI can generate manifests
+                and instantly create new pages without any code deployment.
               </p>
 
               <p>
-                <strong>4. All Halo Widgets:</strong> Supports all widget types
-                - text, email, phone, date, number, slider, radio, checkbox,
-                dropdown, textarea, and location inputs.
+                <strong>4. Complete Widget Support:</strong> All Halo widgets
+                supported - text, email, phone, date, number, slider, radio,
+                checkbox, dropdown, textarea, and location inputs.
               </p>
             </div>
           </div>

@@ -180,19 +180,16 @@ Built-in validation includes:
 
 ## 🔗 Available Routes
 
-- `/` - Widgets demo
-- `/signup` - Static signup page (original)
-- `/dynamic-signup` - Dynamic signup page (manifest-driven)
-- `/dynamic-signin` - Dynamic signin page (manifest-driven)
-- `/page/:manifestId` - Generic page that loads any manifest by ID
+- `/` - Home page explaining the manifest system
+- `/:manifestId` - Dynamic page that loads any manifest by ID (e.g., `/signup`, `/signin`, `/contact`, etc.)
 
 ## 🚀 Getting Started
 
 1. **Start the dev server**: `npm run dev`
-2. **Visit the dynamic pages** to see the engine in action
+2. **Visit dynamic pages** by going to `/:manifestId` (e.g., `/signup`, `/signin`)
 3. **Modify manifests** in `src/manifests/` to see changes instantly
-4. **Create new manifests** and access them via `/page/:manifestId`
-5. **Set up external API** by configuring the manifest service
+4. **Create new manifests** and access them via `/:manifestId`
+5. **Set up external API** by configuring the manifest service to fetch from your AI
 
 ## 🎨 Styling
 

@@ -1,7 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import DynamicSignupPage from "./pages/DynamicSignupPage";
-import DynamicSigninPage from "./pages/DynamicSigninPage";
 import GenericDynamicPage from "./pages/GenericDynamicPage";
 import "./MainApp.css";
 
@@ -31,9 +29,7 @@ function MainApp() {
         <main className="main-content">
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/signup" element={<DynamicSignupPage />} />
-            <Route path="/signin" element={<DynamicSigninPage />} />
-            <Route path="/page/:manifestId" element={<GenericDynamicPage />} />
+            <Route path="/:manifestId" element={<GenericDynamicPage />} />
           </Routes>
         </main>
       </div>

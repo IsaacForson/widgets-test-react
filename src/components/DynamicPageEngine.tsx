@@ -261,7 +261,13 @@ const DynamicPageEngine: React.FC<DynamicPageEngineProps> = ({
             {...commonProps}
             value={fieldValue as string}
             onChange={(value) => handleInputChange(field.id, value)}
-            options={field.options}
+            options={field.options.map((opt) => ({
+              label: opt.label,
+              value: String(opt.value),
+              disabled: opt.disabled,
+            }))}
+            boxBackground={field.boxBackground}
+            dotColor={field.dotColor}
           />
         );
 
@@ -271,9 +277,17 @@ const DynamicPageEngine: React.FC<DynamicPageEngineProps> = ({
             {...commonProps}
             value={fieldValue as string[]}
             onChange={(value) => handleInputChange(field.id, value)}
-            options={field.options}
+            options={field.options.map((opt) => ({
+              label: opt.label,
+              value: String(opt.value),
+              disabled: opt.disabled,
+            }))}
+            selectAll={field.selectAll}
             minSelected={field.minSelected}
             maxSelected={field.maxSelected}
+            single={field.single}
+            boxBackground={field.boxBackground}
+            checkColor={field.checkColor}
           />
         );
 
@@ -281,10 +295,15 @@ const DynamicPageEngine: React.FC<DynamicPageEngineProps> = ({
         return (
           <DropdownInput
             {...commonProps}
-            value={fieldValue as string}
+            value={fieldValue as string | number | Array<string | number>}
             onChange={(value) => handleInputChange(field.id, value)}
-            options={field.options}
+            options={field.options || []}
+            optionsApi={field.optionsApi}
             searchable={field.searchable}
+            minCharsForSearch={field.minCharsForSearch}
+            multiple={field.multiple}
+            maxSelected={field.maxSelected}
+            clearable={field.clearable}
           />
         );
 
