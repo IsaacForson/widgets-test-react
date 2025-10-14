@@ -157,13 +157,46 @@ const DynamicPageEngine: React.FC<DynamicPageEngineProps> = ({
             onChange={(value) => handleInputChange(field.id, value)}
             minLength={field.validation?.minLength}
             maxLength={field.validation?.maxLength}
-            counter={field.counter}
-            clearable={field.clearable}
+            allowedCharsRegex={field.allowedCharsRegex}
+            forbiddenCharsRegex={field.forbiddenCharsRegex}
+            trimOnBlur={field.trimOnBlur}
+            collapseWhitespace={field.collapseWhitespace}
+            preventLeadingTrailingSpace={field.preventLeadingTrailingSpace}
             allowSpaces={field.allowSpaces}
             caseTransform={
-              field.caseTransform as "lowercase" | "uppercase" | undefined
+              field.caseTransform as
+                | "none"
+                | "lowercase"
+                | "uppercase"
+                | "title"
+                | undefined
             }
+            slugify={field.slugify}
+            normalizeDiacritics={field.normalizeDiacritics}
+            clearable={field.clearable}
+            counter={field.counter}
+            warnAt={field.warnAt}
+            errorAt={field.errorAt}
+            prefix={field.prefix}
+            suffix={field.suffix}
+            autoFocus={field.autoFocus}
+            selectOnFocus={field.selectOnFocus}
+            suggestions={field.suggestions}
+            suggestionsSource={field.suggestionsSource}
+            suggestionsApi={field.suggestionsApi}
             minCharsForSuggestions={field.minCharsForSuggestions}
+            matchFrom={field.matchFrom}
+            showSuggestionsOnFocus={field.showSuggestionsOnFocus}
+            maxSuggestions={field.maxSuggestions}
+            size={field.size}
+            variant={field.variant}
+            fullWidth={field.fullWidth}
+            debounceMs={field.debounceMs}
+            spellcheck={field.spellcheck}
+            autoComplete={field.autoComplete}
+            invalid={field.invalid}
+            ariaLabel={field.ariaLabel}
+            ariaDescribedBy={field.ariaDescribedBy}
           />
         );
 
@@ -174,14 +207,35 @@ const DynamicPageEngine: React.FC<DynamicPageEngineProps> = ({
             value={fieldValue as string}
             onChange={(value) => handleInputChange(field.id, value)}
             minLength={field.validation?.minLength}
-            showToggle={field.showToggle}
-            showStrength={field.showStrength}
-            showRequirements={field.showRequirements}
-            showGenerator={field.showGenerator}
             requireLowercase={field.requireLowercase}
             requireUppercase={field.requireUppercase}
             requireNumber={field.requireNumber}
             requireSymbol={field.requireSymbol}
+            minCategories={field.minCategories}
+            forbidRepeats={field.forbidRepeats}
+            forbidSequences={field.forbidSequences}
+            forbidSpaces={field.forbidSpaces}
+            forbiddenCharsRegex={field.forbiddenCharsRegex}
+            commonPasswords={field.commonPasswords}
+            showStrength={field.showStrength}
+            strengthLabels={field.strengthLabels}
+            strongThreshold={field.strongThreshold}
+            showToggle={field.showToggle}
+            revealOnHold={field.revealOnHold}
+            showCopy={field.showCopy}
+            showRequirements={field.showRequirements}
+            showGenerator={field.showGenerator}
+            generatorOptions={field.generatorOptions}
+            checkPwned={field.checkPwned}
+            minLengthForPwned={field.minLengthForPwned}
+            debounceMs={field.debounceMs}
+            size={field.size}
+            variant={field.variant}
+            fullWidth={field.fullWidth}
+            autoComplete={field.autoComplete}
+            invalid={field.invalid}
+            ariaLabel={field.ariaLabel}
+            ariaDescribedBy={field.ariaDescribedBy}
           />
         );
 
@@ -191,9 +245,31 @@ const DynamicPageEngine: React.FC<DynamicPageEngineProps> = ({
             {...commonProps}
             value={fieldValue as string}
             onChange={(value) => handleInputChange(field.id, value)}
-            showDomainSuggestions={field.showDomainSuggestions}
-            lowercase={field.lowercase}
+            allowMultiple={field.allowMultiple}
+            maxEmails={field.maxEmails}
+            separators={field.separators}
+            allowedDomains={field.allowedDomains}
+            blockedDomains={field.blockedDomains}
+            allowedTlds={field.allowedTlds}
+            blockedTlds={field.blockedTlds}
+            forbidPlusAddressing={field.forbidPlusAddressing}
             trim={field.trim}
+            lowercase={field.lowercase}
+            lowercaseDomain={field.lowercaseDomain}
+            clearable={field.clearable}
+            counter={field.counter}
+            showCopy={field.showCopy}
+            showGravatar={field.showGravatar}
+            showDomainSuggestions={field.showDomainSuggestions}
+            domainSuggestions={field.domainSuggestions}
+            minCharsForSuggestions={field.minCharsForSuggestions}
+            size={field.size}
+            variant={field.variant}
+            fullWidth={field.fullWidth}
+            autoComplete={field.autoComplete}
+            invalid={field.invalid}
+            ariaLabel={field.ariaLabel}
+            ariaDescribedBy={field.ariaDescribedBy}
           />
         );
 
@@ -236,7 +312,19 @@ const DynamicPageEngine: React.FC<DynamicPageEngineProps> = ({
             onChange={(value) => handleInputChange(field.id, value)}
             min={field.validation?.min}
             max={field.validation?.max}
+            step={field.step}
             precision={field.precision}
+            allowNegative={field.allowNegative}
+            thousandSeparator={field.thousandSeparator}
+            locale={field.locale}
+            prefix={field.prefix}
+            suffix={field.suffix}
+            formatOnBlur={field.formatOnBlur}
+            parseOnFocus={field.parseOnFocus}
+            clearable={field.clearable}
+            showSteppers={field.showSteppers}
+            selectOnFocus={field.selectOnFocus}
+            debounceMs={field.debounceMs}
           />
         );
 

@@ -15,7 +15,7 @@ export const signupManifest: PageManifest = {
         minLength: 2,
         maxLength: 50,
       },
-      clearable: true,
+      clearable: false,
     },
     {
       id: "lastName",
