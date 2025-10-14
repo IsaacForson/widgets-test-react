@@ -43,14 +43,14 @@
 }
 
 .form-section:last-child {
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
 }
 
 .form-section h2 {
   color: #2d3748;
   font-size: 1.4rem;
   font-weight: 600;
-  margin: 0 0 1.5rem;
+  /* margin: 0 0 1.5rem; */
   padding-bottom: 0.5rem;
   border-bottom: 2px solid #e2e8f0;
 }
@@ -63,7 +63,7 @@
 .form-row {
   display: flex;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  /* margin-bottom: 1.5rem; */
 }
 
 .form-row .form-field {
@@ -71,7 +71,7 @@
 }
 
 .form-field {
-  margin-bottom: 1.5rem;
+  /* margin-bottom: 1.5rem; */
 }
 
 .submit-message {
@@ -171,7 +171,7 @@
   }
   
   .dynamic-form {
-    padding: 1.5rem;
+    /* padding: 1.5rem; */
   }
   
   .form-row {

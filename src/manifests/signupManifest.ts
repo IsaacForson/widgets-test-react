@@ -70,13 +70,13 @@ export const signupManifest: PageManifest = {
       placeholder: "Your age",
       helperText: "Must be between 13 and 120",
       required: true,
+      clearable: false,
       validation: {
         min: 13,
         max: 120,
       },
       precision: 0,
       defaultValue: 18,
-      clearable: false,
     },
     {
       id: "gender",

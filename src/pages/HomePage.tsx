@@ -42,6 +42,30 @@ const HomePage: React.FC = () => {
               >
                 🔐 Signin Page
               </Link>
+
+              <Link
+                to="/contact"
+                className="submit-button"
+                style={{
+                  textDecoration: "none",
+                  textAlign: "center",
+                  display: "block",
+                }}
+              >
+                📧 Contact Form
+              </Link>
+
+              <Link
+                to="/survey"
+                className="submit-button"
+                style={{
+                  textDecoration: "none",
+                  textAlign: "center",
+                  display: "block",
+                }}
+              >
+                📊 User Survey
+              </Link>
             </div>
           </div>
 
