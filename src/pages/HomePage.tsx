@@ -42,20 +42,6 @@ const HomePage: React.FC = () => {
               >
                 🔐 Signin Page
               </Link>
-
-              <Link
-                to="/comprehensive-test"
-                className="submit-button"
-                style={{
-                  textDecoration: "none",
-                  textAlign: "center",
-                  display: "block",
-                  background:
-                    "linear-gradient(135deg, #28a745 0%, #20c997 100%)",
-                }}
-              >
-                🧪 Comprehensive Widget Test
-              </Link>
             </div>
           </div>
 
