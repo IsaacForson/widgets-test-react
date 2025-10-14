@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import App from "./App";
-import SignupPage from "./SignupPage";
+import HomePage from "./pages/HomePage";
+import DynamicSignupPage from "./pages/DynamicSignupPage";
+import DynamicSigninPage from "./pages/DynamicSigninPage";
+import GenericDynamicPage from "./pages/GenericDynamicPage";
 import "./MainApp.css";
 
 function MainApp() {
@@ -10,14 +12,17 @@ function MainApp() {
         <nav className="main-nav">
           <div className="nav-container">
             <Link to="/" className="nav-brand">
-              🎨 Halo Widgets
+              🎨 Manifest Pages
             </Link>
             <div className="nav-links">
               <Link to="/" className="nav-link">
-                Widgets Demo
+                Home
               </Link>
               <Link to="/signup" className="nav-link">
-                Signup Page
+                Signup
+              </Link>
+              <Link to="/signin" className="nav-link">
+                Signin
               </Link>
             </div>
           </div>
@@ -25,8 +30,10 @@ function MainApp() {
 
         <main className="main-content">
           <Routes>
-            <Route path="/" element={<App />} />
-            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/signup" element={<DynamicSignupPage />} />
+            <Route path="/signin" element={<DynamicSigninPage />} />
+            <Route path="/page/:manifestId" element={<GenericDynamicPage />} />
           </Routes>
         </main>
       </div>
