@@ -204,7 +204,7 @@ const HomePage: React.FC = () => {
               />
               <TextareaInput
                 label="Prompt"
-                placeholder="Describe the wizard requirements..."
+                placeholder="Write your prompt here..."
                 value={prompt}
                 onChange={(v) => setPrompt(v)}
                 rows={6}
