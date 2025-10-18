@@ -192,7 +192,7 @@ const HomePage: React.FC = () => {
       <div className="max-w-2xl mx-auto">
         <div className="card bg-base-100 shadow-md">
           <div className="card-body">
-            <h2 className="card-title">Wizard Builder Prompt</h2>
+            <h2 className="card-title text-black">Wizard Builder Prompt</h2>
             <form className="grid gap-4" onSubmit={handleSubmit}>
               <TextInput
                 label="Title"
