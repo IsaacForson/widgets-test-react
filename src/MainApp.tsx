@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import GenericDynamicPage from "./pages/GenericDynamicPage";
+import WizardPage from "./pages/WizardPage";
 import "./MainApp.css";
 
 function MainApp() {
@@ -29,6 +30,7 @@ function MainApp() {
         <main className="main-content">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/wizard" element={<WizardPage />} />
             <Route path="/:manifestId" element={<GenericDynamicPage />} />
           </Routes>
         </main>

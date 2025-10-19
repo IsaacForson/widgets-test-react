@@ -1,15 +1,41 @@
 import React, { useState } from "react";
-// import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { TextInput, TextareaInput } from "halo-widgets/react";
+import { WidgetRecommendationService } from "../services/widgetRecommendationService";
 
 const HomePage: React.FC = () => {
   const [title, setTitle] = useState("");
   const [prompt, setPrompt] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Wire this to your AI request handler
-    console.log({ title, prompt });
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await WidgetRecommendationService.getRecommendations({
+        userIntent: prompt,
+        context: title,
+      });
+
+      // Navigate to wizard page with the response data
+      navigate("/wizard", {
+        state: {
+          wizardData: response,
+          userIntent: prompt,
+          context: title,
+        },
+      });
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "An unexpected error occurred"
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -193,18 +219,38 @@ const HomePage: React.FC = () => {
         <div className="card bg-base-100 shadow-md">
           <div className="card-body">
             <h2 className="card-title text-black">Wizard Builder Prompt</h2>
+
+            {error && (
+              <div className="alert alert-error mb-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="stroke-current shrink-0 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span>{error}</span>
+              </div>
+            )}
+
             <form className="grid gap-4" onSubmit={handleSubmit}>
               <TextInput
-                label="Title"
-                placeholder="Enter a wizard title"
+                label="Context"
+                placeholder="Enter the context (e.g., Annual benefits enrollment with spouse and children)"
                 value={title}
                 onChange={(v) => setTitle(v)}
                 required={true}
                 className="w-full"
               />
               <TextareaInput
-                label="Prompt"
-                placeholder="Write your prompt here..."
+                label="User Intent"
+                placeholder="Describe what you want to accomplish (e.g., I want to enroll in health insurance and add my family)"
                 value={prompt}
                 onChange={(v) => setPrompt(v)}
                 rows={6}
@@ -212,8 +258,12 @@ const HomePage: React.FC = () => {
                 className="w-full"
               />
               <div className="card-actions justify-end">
-                <button type="submit" className="btn btn-primary">
-                  Send Prompt
+                <button
+                  type="submit"
+                  className={`btn btn-primary ${isLoading ? "loading" : ""}`}
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Generating Wizard..." : "Generate Wizard"}
                 </button>
               </div>
             </form>
