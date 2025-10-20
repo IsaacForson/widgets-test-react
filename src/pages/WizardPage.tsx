@@ -243,7 +243,7 @@ const WizardPage: React.FC = () => {
               {!isFirstPage && (
                 <button
                   onClick={handleBack}
-                  className="btn btn-ghost btn-sm gap-2 hover:bg-base-200"
+                  className="py-2 px-4 inline-flex items-center gap-2 text-sm font-medium rounded-lg border bg-base-100 border-base-300 text-base-content hover:bg-white hover:border-primary/20 hover:text-primary transition-all duration-200"
                 >
                   <svg
                     className="w-4 h-4"

@@ -159,11 +159,17 @@ export function ManagedProfileWidget({
         <div className="card-actions justify-end mt-8">
           <button
             type="button"
-            className={`btn btn-primary gap-2 ${isSaving ? "loading" : ""}`}
+            className={`py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border transition-all duration-200 ${
+              isSaving
+                ? "bg-primary/10 border-primary/30 text-primary/60 cursor-not-allowed"
+                : "bg-white border-primary/30 text-primary hover:bg-primary/5 shadow-sm"
+            }`}
             onClick={handleSave}
             disabled={isSaving}
           >
-            {!isSaving && (
+            {isSaving ? (
+              <div className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+            ) : (
               <svg
                 className="w-4 h-4"
                 fill="none"
