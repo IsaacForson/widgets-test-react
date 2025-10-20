@@ -43,6 +43,10 @@ const WizardPage: React.FC = () => {
   const [pageData, setPageData] = useState<
     Record<string, Record<string, unknown>>
   >({});
+  const [originalState, setOriginalState] = useState<{
+    userIntent: string;
+    context: string;
+  } | null>(null);
 
   useEffect(() => {
     const state = location.state as WizardState;
@@ -52,6 +56,10 @@ const WizardPage: React.FC = () => {
       return;
     }
     setWizardData(state.wizardData);
+    setOriginalState({
+      userIntent: state.userIntent,
+      context: state.context,
+    });
   }, [location.state, navigate]);
 
   if (!wizardData) {
@@ -74,14 +82,20 @@ const WizardPage: React.FC = () => {
     }));
 
     if (isLastPage) {
-      // Handle final submission
-      console.log("Final wizard data:", {
+      // Handle final submission - navigate to summary page
+      const finalPageData = {
         ...pageData,
         [currentPage.pageId]: data,
+      };
+
+      navigate("/wizard/summary", {
+        state: {
+          wizardData,
+          pageData: finalPageData,
+          userIntent: originalState?.userIntent || "",
+          context: originalState?.context || "",
+        },
       });
-      // You can add final submission logic here
-      alert("Wizard completed successfully!");
-      navigate("/");
     } else {
       setCurrentPageIndex((prev) => prev + 1);
     }

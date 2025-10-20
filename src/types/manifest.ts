@@ -368,6 +368,11 @@ export interface PageManifest {
       action: "back" | "redirect";
       url?: string;
     };
+    back?: {
+      label: string;
+      action: "back" | "redirect";
+      url?: string;
+    };
   };
   validation?: {
     onSubmit?: string[]; // Custom validation function names

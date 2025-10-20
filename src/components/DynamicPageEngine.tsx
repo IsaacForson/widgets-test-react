@@ -502,28 +502,33 @@ const DynamicPageEngine: React.FC<DynamicPageEngineProps> = ({
           )}
 
           <div className="card-actions justify-between mt-8">
-            {manifest.actions?.cancel && onCancel && (
-              <button
-                type="button"
-                className="py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border bg-base-100 border-base-300 text-base-content hover:bg-white hover:border-primary/20 hover:text-primary transition-all duration-200"
-                onClick={onCancel}
-              >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+            {(manifest.actions?.cancel || manifest.actions?.back) &&
+              onCancel && (
+                <button
+                  type="button"
+                  className="py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border bg-base-100 border-base-300 text-base-content hover:bg-white hover:border-primary/20 hover:text-primary transition-all duration-200"
+                  onClick={onCancel}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-                {manifest.actions.cancel.label.replace("← ", "")}
-              </button>
-            )}
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 19l-7-7 7-7"
+                    />
+                  </svg>
+                  {(
+                    manifest.actions?.back?.label ||
+                    manifest.actions?.cancel?.label ||
+                    "Back"
+                  ).replace("← ", "")}
+                </button>
+              )}
             <button
               type="submit"
               className={`py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border bg-base-100 border-base-300 text-base-content hover:bg-white hover:border-primary/20 hover:text-primary transition-all duration-200 ${

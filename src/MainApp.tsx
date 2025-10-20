@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import GenericDynamicPage from "./pages/GenericDynamicPage";
 import WizardPage from "./pages/WizardPage";
+import WizardSummaryPage from "./pages/WizardSummaryPage";
 import "./MainApp.css";
 
 function MainApp() {
@@ -17,7 +18,7 @@ function MainApp() {
               <Link to="/" className="nav-link">
                 Home
               </Link>
-             {/*  <Link to="/signup" className="nav-link">
+              {/*  <Link to="/signup" className="nav-link">
                 Signup
               </Link>
               <Link to="/signin" className="nav-link">
@@ -31,6 +32,7 @@ function MainApp() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/wizard" element={<WizardPage />} />
+            <Route path="/wizard/summary" element={<WizardSummaryPage />} />
             <Route path="/:manifestId" element={<GenericDynamicPage />} />
           </Routes>
         </main>
