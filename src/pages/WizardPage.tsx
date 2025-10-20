@@ -223,10 +223,10 @@ const WizardPage: React.FC = () => {
         </div>
 
         {/* Current page content */}
-        <div className="card bg-base-100 shadow-xl border border-base-300/20">
+        <div className="card bg-base-100  border border-base-300/20">
           <div className="card-body p-8">
-            <div className="flex justify-between items-start mb-8">
-              <div>
+            <div className="flex justify-between items-start mb-4 border-b pb-4">
+              <div className="">
                 <h2 className="card-title text-2xl text-base-content mb-2">
                   {currentPage.pageTitle}
                 </h2>

@@ -20,8 +20,8 @@ export interface AuthenticationWidgetProps {
 }
 
 export function AuthenticationWidget({
-  title = "Secure Sign In",
-  subtitle = "Enter your email or phone. We'll send you a secure link to continue.",
+  // title = "Secure Sign In",
+  // subtitle = "Enter your email or phone. We'll send you a secure link to continue.",
   defaultChannel = "email",
   allowChannels = ["email", "phone"],
   onSendChallenge,
@@ -63,13 +63,11 @@ export function AuthenticationWidget({
 
   return (
     <div
-      className={`card bg-base-100 shadow-xl border border-base-300/20 ${
+      className={`${
         className || ""
       }`}
     >
-      <div className="card-body">
-        <h2 className="card-title text-2xl mb-2">{title}</h2>
-        {subtitle && <p className="text-base-content/70 mb-4">{subtitle}</p>}
+      <div className="">
 
         {canUseEmail && canUsePhone && (
           <div className="mb-6">
