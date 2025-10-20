@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import {
   TextInput,
   PasswordInput,
@@ -21,6 +21,7 @@ interface DynamicPageEngineProps {
   onSubmit?: (data: Record<string, unknown>) => void;
   onCancel?: () => void;
   className?: string;
+  hideHeader?: boolean; // Hide title and description when used in wizard
 }
 
 interface FormState {
@@ -32,6 +33,7 @@ const DynamicPageEngine: React.FC<DynamicPageEngineProps> = ({
   onSubmit,
   onCancel,
   className = "",
+  hideHeader = false,
 }) => {
   // Initialize form state with default values
   const [formData, setFormData] = useState<FormState>(() => {
@@ -63,10 +65,16 @@ const DynamicPageEngine: React.FC<DynamicPageEngineProps> = ({
   const [submitMessage, setSubmitMessage] = useState("");
 
   const handleInputChange = useCallback((fieldId: string, value: unknown) => {
-    setFormData((prev) => ({
-      ...prev,
-      [fieldId]: value,
-    }));
+    setFormData((prev) => {
+      // Only update if the value actually changed to prevent unnecessary re-renders
+      if (prev[fieldId] === value) {
+        return prev;
+      }
+      return {
+        ...prev,
+        [fieldId]: value,
+      };
+    });
   }, []);
 
   const validateForm = useCallback((): boolean => {
@@ -116,6 +124,9 @@ const DynamicPageEngine: React.FC<DynamicPageEngineProps> = ({
     return true;
   }, [formData, manifest.fields]);
 
+  // Memoize validation result to prevent expensive recalculations on every render
+  const isFormValid = useMemo(() => validateForm(), [validateForm]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -130,7 +141,8 @@ const DynamicPageEngine: React.FC<DynamicPageEngineProps> = ({
       if (manifest.actions?.submit?.successMessage) {
         setSubmitMessage(manifest.actions.submit.successMessage);
       }
-    } catch {
+    } catch (error) {
+      console.error("Error in handleSubmit:", error);
       const errorMessage =
         manifest.actions?.submit?.errorMessage || "An error occurred";
       setSubmitMessage(errorMessage);
@@ -144,7 +156,6 @@ const DynamicPageEngine: React.FC<DynamicPageEngineProps> = ({
     const commonProps = {
       label: field.label,
       placeholder: field.placeholder,
-      helperText: field.helperText,
       required: field.required,
     };
 
@@ -435,10 +446,12 @@ const DynamicPageEngine: React.FC<DynamicPageEngineProps> = ({
       } ${className}`}
     >
       <div className="page-container">
-        <header className="page-header">
-          <h1>{manifest.title}</h1>
-          {manifest.description && <p>{manifest.description}</p>}
-        </header>
+        {!hideHeader && (
+          <header className="page-header">
+            <h1>{manifest.title}</h1>
+            {manifest.description && <p>{manifest.description}</p>}
+          </header>
+        )}
 
         <form onSubmit={handleSubmit} className="dynamic-form">
           {manifest.layout.sections.map((section) => (
@@ -446,7 +459,11 @@ const DynamicPageEngine: React.FC<DynamicPageEngineProps> = ({
               key={section.id}
               className={`form-section ${section.className || ""}`}
             >
-              {section.title && <h2>{section.title}</h2>}
+              {section.title && (
+                <h2 style={{ color: "#7e8aa0", fontWeight: "medium" }}>
+                  {section.title}
+                </h2>
+              )}
               {section.description && <p>{section.description}</p>}
 
               {section.rows.map((row, rowIndex) => (
@@ -484,28 +501,63 @@ const DynamicPageEngine: React.FC<DynamicPageEngineProps> = ({
             </div>
           )}
 
-          <div className="form-actions">
+          <div className="card-actions justify-between mt-8">
+            {manifest.actions?.cancel && onCancel && (
+              <button
+                type="button"
+                className="py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border bg-base-100 border-base-300 text-base-content hover:bg-white hover:border-primary/20 hover:text-primary transition-all duration-200"
+                onClick={onCancel}
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+                {manifest.actions.cancel.label.replace("← ", "")}
+              </button>
+            )}
             <button
               type="submit"
-              className="submit-button"
-              disabled={!validateForm() || isSubmitting}
+              className={`py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border bg-base-100 border-base-300 text-base-content hover:bg-white hover:border-primary/20 hover:text-primary transition-all duration-200 ${
+                isSubmitting
+                  ? "bg-primary/10 border-primary/30 text-primary/60 cursor-not-allowed"
+                  : !isFormValid
+                  ? "bg-base-200 border-base-300 text-base-content/40 cursor-not-allowed"
+                  : ""
+              }`}
+              disabled={!isFormValid || isSubmitting}
             >
+              {isSubmitting ? (
+                <div className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+              ) : (
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              )}
               {isSubmitting
                 ? `${manifest.actions?.submit?.label || "Submit"}...`
                 : manifest.actions?.submit?.label || "Submit"}
             </button>
           </div>
         </form>
-
-        {manifest.actions?.cancel && (
-          <footer className="page-footer">
-            <p>
-              <button type="button" onClick={onCancel} className="cancel-link">
-                {manifest.actions.cancel.label}
-              </button>
-            </p>
-          </footer>
-        )}
       </div>
     </div>
   );

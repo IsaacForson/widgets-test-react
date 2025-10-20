@@ -94,7 +94,11 @@ const WizardPage: React.FC = () => {
   };
 
   const handleCancel = () => {
-    navigate("/");
+    if (!isFirstPage) {
+      handleBack();
+    } else {
+      navigate("/");
+    }
   };
 
   const renderWidget = (page: WidgetPage) => {
@@ -180,6 +184,7 @@ const WizardPage: React.FC = () => {
               manifest={page.manifest as PageManifest}
               onSubmit={handleNext}
               onCancel={handleCancel}
+              hideHeader={true}
             />
           );
         }

@@ -11,18 +11,18 @@ function MainApp() {
         <nav className="main-nav">
           <div className="nav-container">
             <Link to="/" className="nav-brand">
-              🎨 Manifest Pages
+              🎨 Form Builder
             </Link>
             <div className="nav-links">
               <Link to="/" className="nav-link">
                 Home
               </Link>
-              <Link to="/signup" className="nav-link">
+             {/*  <Link to="/signup" className="nav-link">
                 Signup
               </Link>
               <Link to="/signin" className="nav-link">
                 Signin
-              </Link>
+              </Link> */}
             </div>
           </div>
         </nav>
