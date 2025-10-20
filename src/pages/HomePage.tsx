@@ -260,10 +260,10 @@ const HomePage: React.FC = () => {
               <div className="card-actions justify-end">
                 <button
                   type="submit"
-                  className={`py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border transition-all duration-200 focus:outline-none focus:ring-0 ${
+                  className={`py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border bg-base-100 border-base-300 text-base-content/70 hover:bg-white hover:border-primary/20 hover:text-primary transition-all duration-200 ${
                     isLoading
-                      ? "bg-primary/10 border-primary/30 text-primary/60 cursor-not-allowed"
-                      : "bg-white border-primary/30 text-primary hover:bg-primary/5 shadow-sm"
+                      ? "bg-base-200 border-base-300 text-base-content/60 cursor-not-allowed"
+                      : ""
                   }`}
                   disabled={isLoading}
                 >
