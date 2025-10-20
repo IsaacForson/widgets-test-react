@@ -123,12 +123,14 @@ export function ManagedDependentsWidget({
                 value={spouse.firstName}
                 onChange={(v) => setSpouse((s) => ({ ...s, firstName: v }))}
                 className="w-full"
+                clearable={false}
               />
               <TextInput
                 label="Middle Name"
                 value={spouse.middleName || ""}
                 onChange={(v) => setSpouse((s) => ({ ...s, middleName: v }))}
                 className="w-full"
+                clearable={false}
               />
               <TextInput
                 label="Last Name"
@@ -136,6 +138,7 @@ export function ManagedDependentsWidget({
                 value={spouse.lastName}
                 onChange={(v) => setSpouse((s) => ({ ...s, lastName: v }))}
                 className="w-full"
+                clearable={false}
               />
               <DateInput
                 label="Date of Birth"
@@ -144,6 +147,7 @@ export function ManagedDependentsWidget({
                 value={spouse.dob}
                 onChange={(v) => setSpouse((s) => ({ ...s, dob: v as string }))}
                 className="w-full"
+                clearable={false}
               />
             </div>
           </div>
@@ -210,23 +214,26 @@ export function ManagedDependentsWidget({
                         Remove
                       </button>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
                       <TextInput
                         label="First Name"
                         required={true}
                         value={d.firstName}
                         onChange={(v) => updateDependent(idx, "firstName", v)}
+                        clearable={false}
                       />
                       <TextInput
                         label="Middle Name"
                         value={d.middleName || ""}
                         onChange={(v) => updateDependent(idx, "middleName", v)}
+                        clearable={false}
                       />
                       <TextInput
                         label="Last Name"
                         required={true}
                         value={d.lastName}
                         onChange={(v) => updateDependent(idx, "lastName", v)}
+                        clearable={false}
                       />
                       <DateInput
                         label="Date of Birth"
@@ -236,6 +243,7 @@ export function ManagedDependentsWidget({
                         onChange={(v) =>
                           updateDependent(idx, "dob", v as string)
                         }
+                        clearable={false}
                       />
                     </div>
                   </div>
@@ -245,7 +253,7 @@ export function ManagedDependentsWidget({
           </div>
         )}
 
-        <div className="card-actions justify-between mt-8">
+        <div className="card-actions justify-between mt-6">
           <button
             type="button"
             className="py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border bg-base-100 border-base-300 text-base-content hover:bg-white hover:border-primary/20 hover:text-primary transition-all duration-200"

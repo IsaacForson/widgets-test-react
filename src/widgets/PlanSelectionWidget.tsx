@@ -169,7 +169,7 @@ export function PlanSelectionWidget({
           </div>
         </div>
 
-        <div className="card-actions justify-between mt-8">
+        <div className="card-actions justify-between mt-6">
           <button
             type="button"
             className="py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border bg-base-100 border-base-300 text-base-content hover:bg-white hover:border-primary/20 hover:text-primary transition-all duration-200"
@@ -192,7 +192,7 @@ export function PlanSelectionWidget({
           </button>
           <button
             type="button"
-            className="py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border bg-white border-primary/30 text-primary hover:bg-primary/5 shadow-sm transition-all duration-200"
+            className="py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border bg-base-100 border-base-300 text-base-content hover:bg-white hover:border-primary/20 hover:text-primary transition-all duration-200"
             onClick={() => onNext?.(selected)}
           >
             {nextLabel}

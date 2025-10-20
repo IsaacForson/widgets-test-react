@@ -106,6 +106,7 @@ const WizardPage: React.FC = () => {
           <AuthenticationWidget
             title={page.pageTitle}
             onSimulateVerified={() => handleNext({})}
+            onPrevious={!isFirstPage ? () => handleBack() : undefined}
           />
         );
       case "ManagedProfileWidget":
@@ -115,6 +116,7 @@ const WizardPage: React.FC = () => {
             onSave={(data: ProfileData) =>
               handleNext(data as unknown as Record<string, unknown>)
             }
+            onPrevious={!isFirstPage ? () => handleBack() : undefined}
             initial={savedData as Partial<ProfileData>}
           />
         );
@@ -125,7 +127,7 @@ const WizardPage: React.FC = () => {
             onContinue={(data: AddressData) =>
               handleNext(data as unknown as Record<string, unknown>)
             }
-            onPrevious={() => handleBack()}
+            onPrevious={!isFirstPage ? () => handleBack() : undefined}
             initial={savedData as Partial<AddressData>}
           />
         );
@@ -134,7 +136,7 @@ const WizardPage: React.FC = () => {
           <ManagedDependentsWidget
             title={page.pageTitle}
             onNext={(data: Record<string, unknown>) => handleNext(data)}
-            onPrevious={() => handleBack()}
+            onPrevious={!isFirstPage ? () => handleBack() : undefined}
             initialTier={
               savedData.tier as
                 | "employee"
@@ -166,7 +168,7 @@ const WizardPage: React.FC = () => {
             onNext={(selectedPlanIds: string[]) =>
               handleNext({ selectedPlanIds })
             }
-            onPrevious={() => handleBack()}
+            onPrevious={!isFirstPage ? () => handleBack() : undefined}
             initiallySelected={savedData.selectedPlanIds as string[]}
           />
         );
@@ -224,7 +226,7 @@ const WizardPage: React.FC = () => {
 
         {/* Current page content */}
         <div className="card bg-base-100  border border-base-300/20">
-          <div className="card-body p-8">
+          <div className="card-body">
             <div className="flex justify-between items-start mb-4 border-b pb-4">
               <div className="">
                 <h2 className="card-title text-2xl text-base-content mb-2">
@@ -240,27 +242,6 @@ const WizardPage: React.FC = () => {
                   </span>
                 </div>
               </div>
-              {!isFirstPage && (
-                <button
-                  onClick={handleBack}
-                  className="py-2 px-4 inline-flex items-center gap-2 text-sm font-medium rounded-lg border bg-base-100 border-base-300 text-base-content hover:bg-white hover:border-primary/20 hover:text-primary transition-all duration-200"
-                >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 19l-7-7 7-7"
-                    />
-                  </svg>
-                  Back
-                </button>
-              )}
             </div>
 
             <div className="animate-in fade-in duration-300">

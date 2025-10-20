@@ -31,6 +31,7 @@ export interface ManagedProfileWidgetProps {
   employers?: EmployerOption[];
   initial?: Partial<ProfileData>;
   onSave?: (profile: ProfileData) => Promise<void> | void;
+  onPrevious?: () => void;
   savingLabel?: string;
   saveLabel?: string;
   className?: string;
@@ -48,6 +49,7 @@ export function ManagedProfileWidget({
   employers = defaultEmployers,
   initial,
   onSave,
+  onPrevious,
   savingLabel = "Saving...",
   saveLabel = "Save",
   className,
@@ -78,13 +80,9 @@ export function ManagedProfileWidget({
   };
 
   return (
-    <div
-      className={` ${
-        className || ""
-      }`}
-    >
+    <div className={` ${className || ""}`}>
       <div className="">
-       {/*  <h2 className="card-title text-2xl mb-2">{title}</h2>
+        {/*  <h2 className="card-title text-2xl mb-2">{title}</h2>
         {subtitle && <p className="text-base-content/70 mb-6">{subtitle}</p>} */}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
@@ -133,7 +131,8 @@ export function ManagedProfileWidget({
             label="Social Security Number"
             placeholder="XXX-XX-XXXX"
             required={true}
-            pattern="^\\d{3}-\\d{2}-\\d{4}$"
+            maxLength={11}
+            minLength={11}
             value={profile.ssn}
             onChange={(v) => update("ssn", v)}
             className="w-full"
@@ -156,13 +155,35 @@ export function ManagedProfileWidget({
           />
         </div>
 
-        <div className="card-actions justify-end mt-8">
+        <div className="card-actions justify-between">
+          {onPrevious && (
+            <button
+              type="button"
+              className="py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border bg-base-100 border-base-300 text-base-content hover:bg-white hover:border-primary/20 hover:text-primary transition-all duration-200"
+              onClick={() => onPrevious()}
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              Previous
+            </button>
+          )}
           <button
             type="button"
-            className={`py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border transition-all duration-200 ${
+            className={`py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border bg-base-100 border-base-300 text-base-content hover:bg-white hover:border-primary/20 hover:text-primary transition-all duration-200 ${
               isSaving
                 ? "bg-primary/10 border-primary/30 text-primary/60 cursor-not-allowed"
-                : "bg-white border-primary/30 text-primary hover:bg-primary/5 shadow-sm"
+                : ""
             }`}
             onClick={handleSave}
             disabled={isSaving}

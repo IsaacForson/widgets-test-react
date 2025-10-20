@@ -13,6 +13,7 @@ export interface AuthenticationWidgetProps {
     phoneE164?: string;
   }) => Promise<void> | void;
   onSimulateVerified?: () => void;
+  onPrevious?: () => void;
   sendingLabel?: string;
   sentLabel?: string;
   verifyLabel?: string;
@@ -26,6 +27,7 @@ export function AuthenticationWidget({
   allowChannels = ["email", "phone"],
   onSendChallenge,
   onSimulateVerified,
+  onPrevious,
   sendingLabel = "Sending...",
   sentLabel = "Link sent. Check your inbox/messages.",
   verifyLabel = "Simulate Verified",
@@ -62,13 +64,8 @@ export function AuthenticationWidget({
   };
 
   return (
-    <div
-      className={`${
-        className || ""
-      }`}
-    >
+    <div className={`${className || ""}`}>
       <div className="">
-
         {canUseEmail && canUsePhone && (
           <div className="mb-6">
             <div className="form-control mb-4">
@@ -85,7 +82,7 @@ export function AuthenticationWidget({
                 type="button"
                 className={`flex-1 py-3 px-4 inline-flex items-center justify-center gap-x-2 text-sm font-medium rounded-lg border transition-all duration-200 ${
                   selectedChannel === "email"
-                    ? "bg-white border-primary/30 text-primary shadow-sm"
+                    ? "bg-white border-primary/30 text-primary"
                     : "bg-base-100 border-base-300 text-base-content/70 hover:bg-white hover:border-primary/20 hover:text-primary"
                 }`}
                 onClick={() => setSelectedChannel("email")}
@@ -111,7 +108,7 @@ export function AuthenticationWidget({
                 type="button"
                 className={`flex-1 py-3 px-4 inline-flex items-center justify-center gap-x-2 text-sm font-medium rounded-lg border transition-all duration-200 ${
                   selectedChannel === "phone"
-                    ? "bg-white border-primary/30 text-primary shadow-sm"
+                    ? "bg-white border-primary/30 text-primary "
                     : "bg-base-100 border-base-300 text-base-content/70 hover:bg-white hover:border-primary/20 hover:text-primary"
                 }`}
                 onClick={() => setSelectedChannel("phone")}
@@ -266,10 +263,10 @@ export function AuthenticationWidget({
         <div className="card-actions justify-end gap-4 mt-6">
           <button
             type="button"
-            className={`py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border transition-all duration-200 ${
+            className={`py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border bg-base-100 border-base-300 text-base-content/70 hover:bg-white hover:border-primary/20 hover:text-primary transition-all duration-200 ${
               isSending
                 ? "bg-primary/10 border-primary/30 text-primary/60 cursor-not-allowed"
-                : "bg-white border-primary/30 text-primary hover:bg-primary/5 shadow-sm"
+                : ""
             }`}
             onClick={handleSend}
             disabled={isSending}
@@ -315,6 +312,33 @@ export function AuthenticationWidget({
               {verifyLabel}
             </button>
           )}
+        </div>
+
+        {/* Navigation buttons */}
+        <div className="card-actions justify-between">
+          {onPrevious && (
+            <button
+              type="button"
+              className="py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border bg-base-100 border-base-300 text-base-content hover:bg-white hover:border-primary/20 hover:text-primary transition-all duration-200"
+              onClick={() => onPrevious()}
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              Previous
+            </button>
+          )}
+          <div></div>
         </div>
       </div>
     </div>

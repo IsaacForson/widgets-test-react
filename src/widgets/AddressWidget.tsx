@@ -77,13 +77,14 @@ export function AddressWidget({
             value={data.address1}
             onChange={(v) => update("address1", v)}
             className="w-full md:col-span-2"
-            clearable={true}
+            clearable={false}
           />
           <TextInput
             label="Address Line 2"
             value={data.address2 || ""}
             onChange={(v) => update("address2", v)}
             className="w-full md:col-span-2"
+            clearable={false}
           />
           <TextInput
             label="City"
@@ -91,6 +92,7 @@ export function AddressWidget({
             value={data.city}
             onChange={(v) => update("city", v)}
             className="w-full"
+            clearable={false}
           />
           <DropdownInput
             label="State"
@@ -105,14 +107,16 @@ export function AddressWidget({
             label="ZIP Code"
             placeholder="12345 or 12345-6789"
             required={true}
-            pattern="^\\d{5}(-\\d{4})?$"
+            maxLength={10}
+            minLength={3}
             value={data.zip}
             onChange={(v) => update("zip", v)}
             className="w-full"
+            clearable={false}
           />
         </div>
 
-        <div className="card-actions justify-between mt-8">
+        <div className="card-actions justify-between">
           <button
             type="button"
             className="py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border bg-base-100 border-base-300 text-base-content hover:bg-white hover:border-primary/20 hover:text-primary transition-all duration-200"
@@ -135,10 +139,10 @@ export function AddressWidget({
           </button>
           <button
             type="button"
-            className={`py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border transition-all duration-200 ${
+            className={`py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border bg-base-100 border-base-300 text-base-content hover:bg-white hover:border-primary/20 hover:text-primary transition-all duration-200 ${
               !canContinue
                 ? "bg-base-200 border-base-300 text-base-content/40 cursor-not-allowed"
-                : "bg-white border-primary/30 text-primary hover:bg-primary/5 shadow-sm"
+                : ""
             }`}
             disabled={!canContinue}
             onClick={() => onContinue?.(data)}
