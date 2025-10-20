@@ -249,7 +249,7 @@ const HomePage: React.FC = () => {
                 className="w-full"
               />
               <TextareaInput
-                label="User Intent"
+                label="User Prompt"
                 placeholder="Describe what you want to accomplish (e.g., I want to enroll in health insurance and add my family)"
                 value={prompt}
                 onChange={(v) => setPrompt(v)}
