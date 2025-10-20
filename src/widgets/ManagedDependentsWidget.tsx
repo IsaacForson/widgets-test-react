@@ -93,13 +93,9 @@ export function ManagedDependentsWidget({
   };
 
   return (
-    <div
-      className={`${
-        className || ""
-      }`}
-    >
+    <div className={`${className || ""}`}>
       <div className="">
-       {/*  <h2 className="card-title text-2xl mb-2">{title}</h2>
+        {/*  <h2 className="card-title text-2xl mb-2">{title}</h2>
         {subtitle && <p className="text-base-content/70 mb-6">{subtitle}</p>} */}
 
         <RadioInput
@@ -116,7 +112,9 @@ export function ManagedDependentsWidget({
         {spouseRequired && (
           <div className="mt-6">
             <div className="divider">
-              <span className="text-lg font-semibold text-[#7e8aa0]">Spouse Details</span>
+              <span className="text-lg font-semibold text-[#7e8aa0]">
+                Spouse Details
+              </span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
               <TextInput
@@ -154,12 +152,14 @@ export function ManagedDependentsWidget({
         {familyAllowsDependents && (
           <div className="mt-8">
             <div className="divider">
-              <span className="text-lg font-semibold text-[#7e8aa0]">Dependents</span>
+              <span className="text-lg font-semibold text-[#7e8aa0]">
+                Dependents
+              </span>
             </div>
             <div className="flex justify-end mb-4">
               <button
                 type="button"
-                className="btn btn-primary btn-sm gap-2"
+                className="py-2 px-4 inline-flex items-center gap-2 text-sm font-medium rounded-lg border bg-base-100 border-base-300 text-base-content hover:bg-white hover:border-primary/20 hover:text-primary transition-all duration-200 focus:outline-none focus:ring-0"
                 onClick={addDependent}
               >
                 <svg
@@ -191,7 +191,7 @@ export function ManagedDependentsWidget({
                       </h4>
                       <button
                         type="button"
-                        className="btn btn-ghost btn-xs gap-1"
+                        className="py-1 px-2 inline-flex items-center gap-1 text-xs font-medium rounded border bg-base-100 border-base-300 text-base-content hover:bg-white hover:border-primary/20 hover:text-primary transition-all duration-200 focus:outline-none"
                         onClick={() => removeDependent(idx)}
                       >
                         <svg
