@@ -93,10 +93,14 @@ export function ManagedDependentsWidget({
   };
 
   return (
-    <div className={"card bg-base-100 shadow-md " + (className || "")}>
+    <div
+      className={`card bg-base-100 shadow-xl border border-base-300/20 ${
+        className || ""
+      }`}
+    >
       <div className="card-body">
-        <h2 className="card-title">{title}</h2>
-        {subtitle ? <p className="text-base-content/70">{subtitle}</p> : null}
+        <h2 className="card-title text-2xl mb-2">{title}</h2>
+        {subtitle && <p className="text-base-content/70 mb-6">{subtitle}</p>}
 
         <RadioInput
           label="Coverage Tier"
@@ -110,8 +114,10 @@ export function ManagedDependentsWidget({
         />
 
         {spouseRequired && (
-          <div className="mt-4">
-            <div className="font-semibold mb-2">Spouse Details</div>
+          <div className="mt-6">
+            <div className="divider">
+              <span className="text-lg font-semibold">Spouse Details</span>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <TextInput
                 label="First Name"
@@ -146,54 +152,92 @@ export function ManagedDependentsWidget({
         )}
 
         {familyAllowsDependents && (
-          <div className="mt-6">
-            <div className="flex items-center justify-between mb-2">
-              <div className="font-semibold">Dependents</div>
+          <div className="mt-8">
+            <div className="divider">
+              <span className="text-lg font-semibold">Dependents</span>
+            </div>
+            <div className="flex justify-end mb-4">
               <button
                 type="button"
-                className="btn btn-sm"
+                className="btn btn-primary btn-sm gap-2"
                 onClick={addDependent}
               >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  />
+                </svg>
                 Add Dependent
               </button>
             </div>
             <div className="grid grid-cols-1 gap-4">
               {dependents.map((d, idx) => (
-                <div key={idx} className="border rounded-box p-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <TextInput
-                      label="First Name"
-                      required={true}
-                      value={d.firstName}
-                      onChange={(v) => updateDependent(idx, "firstName", v)}
-                    />
-                    <TextInput
-                      label="Middle Name"
-                      value={d.middleName || ""}
-                      onChange={(v) => updateDependent(idx, "middleName", v)}
-                    />
-                    <TextInput
-                      label="Last Name"
-                      required={true}
-                      value={d.lastName}
-                      onChange={(v) => updateDependent(idx, "lastName", v)}
-                    />
-                    <DateInput
-                      label="Date of Birth"
-                      format="MM/DD/YYYY"
-                      required={true}
-                      value={d.dob}
-                      onChange={(v) => updateDependent(idx, "dob", v as string)}
-                    />
-                  </div>
-                  <div className="mt-3 flex justify-end">
-                    <button
-                      type="button"
-                      className="btn btn-ghost btn-sm"
-                      onClick={() => removeDependent(idx)}
-                    >
-                      Remove
-                    </button>
+                <div
+                  key={idx}
+                  className="card bg-base-200 border border-base-300/50"
+                >
+                  <div className="card-body p-4">
+                    <div className="flex justify-between items-center mb-3">
+                      <h4 className="font-medium text-base-content">
+                        Dependent #{idx + 1}
+                      </h4>
+                      <button
+                        type="button"
+                        className="btn btn-ghost btn-xs gap-1"
+                        onClick={() => removeDependent(idx)}
+                      >
+                        <svg
+                          className="w-3 h-3"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                        Remove
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <TextInput
+                        label="First Name"
+                        required={true}
+                        value={d.firstName}
+                        onChange={(v) => updateDependent(idx, "firstName", v)}
+                      />
+                      <TextInput
+                        label="Middle Name"
+                        value={d.middleName || ""}
+                        onChange={(v) => updateDependent(idx, "middleName", v)}
+                      />
+                      <TextInput
+                        label="Last Name"
+                        required={true}
+                        value={d.lastName}
+                        onChange={(v) => updateDependent(idx, "lastName", v)}
+                      />
+                      <DateInput
+                        label="Date of Birth"
+                        format="MM/DD/YYYY"
+                        required={true}
+                        value={d.dob}
+                        onChange={(v) =>
+                          updateDependent(idx, "dob", v as string)
+                        }
+                      />
+                    </div>
                   </div>
                 </div>
               ))}
@@ -201,21 +245,47 @@ export function ManagedDependentsWidget({
           </div>
         )}
 
-        <div className="card-actions justify-between mt-4">
+        <div className="card-actions justify-between mt-8">
           <button
             type="button"
-            className="btn"
+            className="btn btn-outline gap-2"
             onClick={() => onPrevious?.(payload)}
           >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
             {previousLabel}
           </button>
           <button
             type="button"
-            className="btn btn-primary"
+            className="btn btn-primary gap-2"
             disabled={!canProceed}
             onClick={() => onNext?.(payload)}
           >
             {nextLabel}
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
           </button>
         </div>
       </div>

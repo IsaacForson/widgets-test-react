@@ -61,10 +61,14 @@ export function AddressWidget({
     /^\d{5}(-\d{4})?$/.test(data.zip);
 
   return (
-    <div className={"card bg-base-100 shadow-md " + (className || "")}>
+    <div
+      className={`card bg-base-100 shadow-xl border border-base-300/20 ${
+        className || ""
+      }`}
+    >
       <div className="card-body">
-        <h2 className="card-title">{title}</h2>
-        {subtitle ? <p className="text-base-content/70">{subtitle}</p> : null}
+        <h2 className="card-title text-2xl mb-2">{title}</h2>
+        {subtitle && <p className="text-base-content/70 mb-6">{subtitle}</p>}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <TextInput
@@ -106,21 +110,47 @@ export function AddressWidget({
           />
         </div>
 
-        <div className="card-actions justify-between mt-2">
+        <div className="card-actions justify-between mt-8">
           <button
             type="button"
-            className="btn"
+            className="btn btn-outline gap-2"
             onClick={() => onPrevious?.(data)}
           >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
             {previousLabel}
           </button>
           <button
             type="button"
-            className="btn btn-primary"
+            className="btn btn-primary gap-2"
             disabled={!canContinue}
             onClick={() => onContinue?.(data)}
           >
             {continueLabel}
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
           </button>
         </div>
       </div>

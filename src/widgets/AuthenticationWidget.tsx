@@ -62,33 +62,68 @@ export function AuthenticationWidget({
   };
 
   return (
-    <div className={"card bg-base-100 shadow-md " + (className || "")}>
+    <div
+      className={`card bg-base-100 shadow-xl border border-base-300/20 ${
+        className || ""
+      }`}
+    >
       <div className="card-body">
-        <h2 className="card-title">{title}</h2>
-        {subtitle ? <p className="text-base-content/70">{subtitle}</p> : null}
+        <h2 className="card-title text-2xl mb-2">{title}</h2>
+        {subtitle && <p className="text-base-content/70 mb-4">{subtitle}</p>}
 
         {canUseEmail && canUsePhone && (
-          <div className="join my-2">
-            <button
-              type="button"
-              className={
-                "btn join-item " +
-                (selectedChannel === "email" ? "btn-primary" : "btn-ghost")
-              }
-              onClick={() => setSelectedChannel("email")}
-            >
-              Email
-            </button>
-            <button
-              type="button"
-              className={
-                "btn join-item " +
-                (selectedChannel === "phone" ? "btn-primary" : "btn-ghost")
-              }
-              onClick={() => setSelectedChannel("phone")}
-            >
-              Phone
-            </button>
+          <div className="form-control mb-4">
+            <label className="label">
+              <span className="label-text font-medium">
+                Choose sign-in method
+              </span>
+            </label>
+            <div className="join w-full">
+              <button
+                type="button"
+                className={`btn join-item flex-1 ${
+                  selectedChannel === "email" ? "btn-primary" : "btn-outline"
+                }`}
+                onClick={() => setSelectedChannel("email")}
+              >
+                <svg
+                  className="w-4 h-4 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
+                  />
+                </svg>
+                Email
+              </button>
+              <button
+                type="button"
+                className={`btn join-item flex-1 ${
+                  selectedChannel === "phone" ? "btn-primary" : "btn-outline"
+                }`}
+                onClick={() => setSelectedChannel("phone")}
+              >
+                <svg
+                  className="w-4 h-4 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                  />
+                </svg>
+                Phone
+              </button>
+            </div>
           </div>
         )}
 
@@ -117,26 +152,66 @@ export function AuthenticationWidget({
         )}
 
         {sent && (
-          <div className="alert alert-success">
+          <div className="alert alert-success mb-4">
+            <svg
+              className="w-6 h-6 stroke-current shrink-0"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
             <span>{sentLabel}</span>
           </div>
         )}
 
-        <div className="card-actions justify-end mt-2">
+        <div className="card-actions justify-end gap-2 mt-6">
           <button
             type="button"
-            className="btn btn-primary"
+            className={`btn btn-primary gap-2 ${isSending ? "loading" : ""}`}
             onClick={handleSend}
             disabled={isSending}
           >
+            {!isSending && (
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                />
+              </svg>
+            )}
             {isSending ? sendingLabel : "Send Link"}
           </button>
           {onSimulateVerified && (
             <button
               type="button"
-              className="btn btn-ghost"
+              className="btn btn-outline gap-2"
               onClick={() => onSimulateVerified?.()}
             >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+              </svg>
               {verifyLabel}
             </button>
           )}
