@@ -33,8 +33,8 @@ const defaultStates = [
 ];
 
 export function AddressWidget({
-  title = "Address",
-  subtitle = "Enter your mailing address.",
+  // title = "Address",
+  // subtitle = "Enter your mailing address.",
   initial,
   stateOptions,
   onPrevious,
@@ -62,21 +62,22 @@ export function AddressWidget({
 
   return (
     <div
-      className={`card bg-base-100 shadow-xl border border-base-300/20 ${
+      className={` ${
         className || ""
       }`}
     >
-      <div className="card-body">
-        <h2 className="card-title text-2xl mb-2">{title}</h2>
-        {subtitle && <p className="text-base-content/70 mb-6">{subtitle}</p>}
+      <div className="">
+      {/*   <h2 className="card-title text-2xl mb-2">{title}</h2>
+        {subtitle && <p className="text-base-content/70 mb-6">{subtitle}</p>} */}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
           <TextInput
             label="Address Line 1"
             required={true}
             value={data.address1}
             onChange={(v) => update("address1", v)}
             className="w-full md:col-span-2"
+            clearable={true}
           />
           <TextInput
             label="Address Line 2"
@@ -98,6 +99,7 @@ export function AddressWidget({
             value={data.state}
             onChange={(val) => update("state", val as string)}
             className="w-full"
+            clearable={false}
           />
           <TextInput
             label="ZIP Code"

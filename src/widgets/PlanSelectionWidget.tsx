@@ -50,8 +50,8 @@ const defaultPlans: PlanItem[] = [
 ];
 
 export function PlanSelectionWidget({
-  title = "Plan Selection",
-  subtitle = "Choose your desired plans.",
+  // title = "Plan Selection",
+  // subtitle = "Choose your desired plans.",
   availablePlans = defaultPlans,
   initiallySelected = [],
   onPrevious,
@@ -83,23 +83,23 @@ export function PlanSelectionWidget({
 
   return (
     <div
-      className={`card bg-base-100 shadow-xl border border-base-300/20 ${
+      className={` ${
         className || ""
       }`}
     >
-      <div className="card-body">
-        <h2 className="card-title text-2xl mb-2">{title}</h2>
-        {subtitle && <p className="text-base-content/70 mb-6">{subtitle}</p>}
+      <div className="">
+       {/*  <h2 className="card-title text-2xl mb-2">{title}</h2>
+        {subtitle && <p className="text-base-content/70 mb-6">{subtitle}</p>} */}
 
         <CheckboxInput
           label="Available Plans"
           options={options}
           value={selected}
           onChange={(vals) => setSelected(vals)}
-          className="w-full"
+          className="w-full text-base-content"
         />
 
-        <div className="divider my-6" />
+        <div className="divider mb-6" />
 
         <div className="card bg-primary/10 border border-primary/20">
           <div className="card-body p-4">
@@ -115,7 +115,7 @@ export function PlanSelectionWidget({
         </div>
 
         <div className="mt-6">
-          <h3 className="text-lg font-semibold mb-4">Plan Details</h3>
+          <h3 className="text-lg font-semibold mb-4 text-[#7e8aa0]">Plan Details</h3>
           <div className="grid grid-cols-1 gap-3">
             {availablePlans.map((p) => (
               <div
@@ -139,7 +139,7 @@ export function PlanSelectionWidget({
                       )}
                     </div>
                     <div className="text-right ml-4">
-                      <div className="font-bold text-lg">
+                      <div className="font-bold text-lg text-[#7e8aa0]">
                         ${p.priceMonthly.toFixed(2)}
                       </div>
                       <div className="text-xs text-base-content/60">

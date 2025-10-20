@@ -80,7 +80,7 @@ export function AuthenticationWidget({
             </div>
 
             {/* Tab Navigation */}
-            <div className="flex gap-2 mb-6">
+            <div className="flex gap-4 mb-6">
               <button
                 type="button"
                 className={`flex-1 py-3 px-4 inline-flex items-center justify-center gap-x-2 text-sm font-medium rounded-lg border transition-all duration-200 ${
@@ -143,7 +143,7 @@ export function AuthenticationWidget({
                   className="animate-in fade-in duration-200"
                 >
                   <div className="mb-4">
-                    <div className="flex items-center gap-2 mb-3">
+                    <div className="flex items-center gap-4 mb-3">
                       <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
                         <svg
                           className="w-3 h-3 text-primary"
@@ -182,7 +182,7 @@ export function AuthenticationWidget({
                   className="animate-in fade-in duration-200"
                 >
                   <div className="mb-4">
-                    <div className="flex items-center gap-2 mb-3">
+                    <div className="flex items-center gap-4 mb-3">
                       <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
                         <svg
                           className="w-3 h-3 text-primary"
@@ -263,7 +263,7 @@ export function AuthenticationWidget({
           </div>
         )}
 
-        <div className="card-actions justify-end gap-2 mt-6">
+        <div className="card-actions justify-end gap-4 mt-6">
           <button
             type="button"
             className={`py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border transition-all duration-200 ${

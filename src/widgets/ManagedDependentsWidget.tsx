@@ -32,8 +32,8 @@ export interface ManagedDependentsWidgetProps {
 }
 
 export function ManagedDependentsWidget({
-  title = "Dependents",
-  subtitle = "Select coverage tier and manage dependents.",
+  // title = "Dependents",
+  // subtitle = "Select coverage tier and manage dependents.",
   initialTier = "employee",
   initialSpouse,
   initialDependents,
@@ -94,13 +94,13 @@ export function ManagedDependentsWidget({
 
   return (
     <div
-      className={`card bg-base-100 shadow-xl border border-base-300/20 ${
+      className={`${
         className || ""
       }`}
     >
-      <div className="card-body">
-        <h2 className="card-title text-2xl mb-2">{title}</h2>
-        {subtitle && <p className="text-base-content/70 mb-6">{subtitle}</p>}
+      <div className="">
+       {/*  <h2 className="card-title text-2xl mb-2">{title}</h2>
+        {subtitle && <p className="text-base-content/70 mb-6">{subtitle}</p>} */}
 
         <RadioInput
           label="Coverage Tier"
@@ -116,9 +116,9 @@ export function ManagedDependentsWidget({
         {spouseRequired && (
           <div className="mt-6">
             <div className="divider">
-              <span className="text-lg font-semibold">Spouse Details</span>
+              <span className="text-lg font-semibold text-[#7e8aa0]">Spouse Details</span>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
               <TextInput
                 label="First Name"
                 required={true}
@@ -154,7 +154,7 @@ export function ManagedDependentsWidget({
         {familyAllowsDependents && (
           <div className="mt-8">
             <div className="divider">
-              <span className="text-lg font-semibold">Dependents</span>
+              <span className="text-lg font-semibold text-[#7e8aa0]">Dependents</span>
             </div>
             <div className="flex justify-end mb-4">
               <button
