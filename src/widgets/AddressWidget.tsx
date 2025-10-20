@@ -61,13 +61,9 @@ export function AddressWidget({
     /^\d{5}(-\d{4})?$/.test(data.zip);
 
   return (
-    <div
-      className={` ${
-        className || ""
-      }`}
-    >
+    <div className={` ${className || ""}`}>
       <div className="">
-      {/*   <h2 className="card-title text-2xl mb-2">{title}</h2>
+        {/*   <h2 className="card-title text-2xl mb-2">{title}</h2>
         {subtitle && <p className="text-base-content/70 mb-6">{subtitle}</p>} */}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
