@@ -18,12 +18,6 @@ function MainApp() {
               <Link to="/" className="nav-link">
                 Home
               </Link>
-              {/*  <Link to="/signup" className="nav-link">
-                Signup
-              </Link>
-              <Link to="/signin" className="nav-link">
-                Signin
-              </Link> */}
             </div>
           </div>
         </nav>
