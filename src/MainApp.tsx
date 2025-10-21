@@ -12,7 +12,7 @@ function MainApp() {
         <nav className="main-nav">
           <div className="nav-container">
             <Link to="/" className="nav-brand">
-              🎨 Form Builder
+              🎨 Wizard Builder
             </Link>
             <div className="nav-links">
               <Link to="/" className="nav-link">
