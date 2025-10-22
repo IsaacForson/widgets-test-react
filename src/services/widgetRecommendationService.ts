@@ -20,7 +20,7 @@ export interface WidgetRecommendationResponse {
   flowDescription: string;
 }
 
-const API_BASE_URL = "http://localhost:3007";
+const API_BASE_URL = "https://enhanced-experience-platform.onrender.com";
 
 export class WidgetRecommendationService {
   static async getRecommendations(
