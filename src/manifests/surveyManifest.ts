@@ -87,7 +87,7 @@ export const surveyManifest: PageManifest = {
       label: "When did you start using our platform?",
       helperText: "Approximate date is fine",
       required: false,
-      mode: "single",
+      mode: "range",
       format: "MM/DD/YYYY",
     },
     {
