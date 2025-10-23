@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
+import Button from "../components/Button";
 
 // Dummy API service - will be replaced with real Claude integration
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -192,20 +193,20 @@ const HomePage: React.FC = () => {
 
         {/* Slide 1: Initial Intent Capture */}
         {step === "slide1" && (
-          <div className="card bg-base-100 shadow-xl">
+          <div className="card bg-base-100">
             <div className="card-body">
-              <h2 className="card-title text-2xl mb-4">
+              <h2 className="card-title text-2xl mb-4 text-black text-base">
                 Tell me about the agent you want
               </h2>
-              <p className="text-base-content/70 mb-6">
+              <p className="text-base-content/70 ">
                 Describe your chatbot idea in your own words. The more details
                 you provide, the better!
               </p>
 
-              <form onSubmit={handleSlide1Submit} className="space-y-6">
+              <form onSubmit={handleSlide1Submit} className="space-y-3">
                 <div className="form-control">
                   <textarea
-                    className="textarea textarea-bordered h-40 text-base"
+                    className="placeholder:text-gray-400 textarea border border-gray-200 h-40 text-base focus:outline-none focus:ring-0 w-full text-black text-sm resize-none !rounded-lg"
                     placeholder="Example: I want a customer support chatbot for my e-commerce store that can help customers track orders, answer product questions, and handle returns..."
                     value={userDescription}
                     onChange={(e) => setUserDescription(e.target.value)}
@@ -214,15 +215,12 @@ const HomePage: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <button
-                    type="button"
+                  <Button
+                    variant={isListening ? "danger" : "secondary"}
+                    size="sm"
                     onClick={handleVoiceInput}
-                    className={`btn btn-outline gap-2 ${
-                      isListening ? "btn-error" : "btn-primary"
-                    }`}
-                  >
-                    {isListening ? (
-                      <>
+                    icon={
+                      isListening ? (
                         <svg
                           className="w-5 h-5"
                           fill="none"
@@ -242,10 +240,7 @@ const HomePage: React.FC = () => {
                             d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"
                           />
                         </svg>
-                        Stop Listening
-                      </>
-                    ) : (
-                      <>
+                      ) : (
                         <svg
                           className="w-5 h-5"
                           fill="none"
@@ -259,10 +254,11 @@ const HomePage: React.FC = () => {
                             d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
                           />
                         </svg>
-                        Click to Talk
-                      </>
-                    )}
-                  </button>
+                      )
+                    }
+                  >
+                    {isListening ? "Stop Listening" : "Click to Talk"}
+                  </Button>
 
                   <div className="text-sm text-base-content/60">
                     {isListening
@@ -272,19 +268,14 @@ const HomePage: React.FC = () => {
                 </div>
 
                 <div className="card-actions justify-end mt-6">
-                  <button
+                  <Button
                     type="submit"
-                    disabled={isLoading || !userDescription.trim()}
-                    className="btn btn-primary btn-lg gap-2"
-                  >
-                    {isLoading ? (
-                      <>
-                        <span className="loading loading-spinner"></span>
-                        Analyzing...
-                      </>
-                    ) : (
-                      <>
-                        Continue
+                    variant="primary"
+                    size="sm"
+                    disabled={!userDescription.trim()}
+                    loading={isLoading}
+                    icon={
+                      !isLoading && (
                         <svg
                           className="w-5 h-5"
                           fill="none"
@@ -298,9 +289,11 @@ const HomePage: React.FC = () => {
                             d="M9 5l7 7-7 7"
                           />
                         </svg>
-                      </>
-                    )}
-                  </button>
+                      )
+                    }
+                  >
+                    {isLoading ? "Analyzing..." : "Continue"}
+                  </Button>
                 </div>
               </form>
             </div>
@@ -365,46 +358,51 @@ const HomePage: React.FC = () => {
                 </div>
 
                 <div className="card-actions justify-between">
-                  <button
-                    type="button"
+                  <Button
+                    variant="secondary"
+                    size="sm"
                     onClick={() => setStep("slide1")}
-                    className="btn btn-ghost gap-2"
+                    icon={
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 19l-7-7 7-7"
+                        />
+                      </svg>
+                    }
                   >
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 19l-7-7 7-7"
-                      />
-                    </svg>
                     Back
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     type="submit"
+                    variant="primary"
+                    size="sm"
                     disabled={!answers.trim()}
-                    className="btn btn-primary btn-lg gap-2"
+                    icon={
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    }
                   >
                     Create Chatbot
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </button>
+                  </Button>
                 </div>
               </form>
             </div>
@@ -493,22 +491,28 @@ const HomePage: React.FC = () => {
               </div>
 
               <div className="card-actions mt-8">
-                <button onClick={handleReset} className="btn btn-primary gap-2">
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={handleReset}
+                  icon={
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4v16m8-8H4"
+                      />
+                    </svg>
+                  }
+                >
                   Create Another Chatbot
-                </button>
+                </Button>
               </div>
             </div>
           </div>
