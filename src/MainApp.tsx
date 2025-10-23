@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import HomePage from "./pages/HomePage";
+import WidgetsPage from "./pages/WidgetsPage";
 import GenericDynamicPage from "./pages/GenericDynamicPage";
 import WizardPage from "./pages/WizardPage";
 import WizardSummaryPage from "./pages/WizardSummaryPage";
@@ -12,18 +13,15 @@ function MainApp() {
         <nav className="main-nav">
           <div className="nav-container">
             <Link to="/" className="nav-brand">
-              🎨 Wizard Builder
+              🤖 Chatbot Builder
             </Link>
             <div className="nav-links">
               <Link to="/" className="nav-link">
                 Home
               </Link>
-              {/*  <Link to="/signup" className="nav-link">
-                Signup
+              <Link to="/widgets" className="nav-link">
+                Widgets Builder
               </Link>
-              <Link to="/signin" className="nav-link">
-                Signin
-              </Link> */}
             </div>
           </div>
         </nav>
@@ -31,6 +29,7 @@ function MainApp() {
         <main className="main-content">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/widgets" element={<WidgetsPage />} />
             <Route path="/wizard" element={<WizardPage />} />
             <Route path="/wizard/summary" element={<WizardSummaryPage />} />
             <Route path="/:manifestId" element={<GenericDynamicPage />} />
