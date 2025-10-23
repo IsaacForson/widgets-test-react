@@ -1,36 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import Button from "../components/Button";
-
-// Dummy API service - will be replaced with real Claude integration
-/* eslint-disable @typescript-eslint/no-unused-vars */
-const ChatbotService = {
-  async evaluateIntent(_description: string) {
-    // Simulating API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    // For MVP, always return that more info is needed
-    return {
-      isEnough: false,
-      questions: [
-        "What is the primary purpose of this chatbot? (e.g., customer support, lead generation, FAQ)",
-        "Who is your target audience?",
-        "What tone should the chatbot use? (e.g., professional, casual, friendly)",
-      ],
-    };
-  },
-
-  async publishChatbot(_description: string, _answers: string) {
-    // Simulating publishing
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    return {
-      chatLink: "https://chat.example.com/your-bot-id",
-      phoneNumber: "+1 (555) 123-4567",
-    };
-  },
-};
-/* eslint-enable @typescript-eslint/no-unused-vars */
+import { GeminiService } from "../services/geminiService";
 
 type WizardStep = "slide1" | "slide2" | "publishing" | "complete";
 
@@ -145,7 +116,7 @@ const HomePage: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const result = await ChatbotService.evaluateIntent(userDescription);
+      const result = await GeminiService.evaluateIntent(userDescription);
 
       if (result.isEnough) {
         // Skip to publishing
@@ -176,7 +147,7 @@ const HomePage: React.FC = () => {
     try {
       // Combine all answers into a single string
       const combinedAnswers = Object.values(answers).join(" | ");
-      const result = await ChatbotService.publishChatbot(
+      const result = await GeminiService.publishChatbot(
         userDescription,
         combinedAnswers
       );
