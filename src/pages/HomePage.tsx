@@ -325,7 +325,7 @@ const HomePage: React.FC = () => {
         {step === "slide2" && (
           <div className="card bg-base-100">
             <div className="card-body">
-              <h2 className="card-title text-2xl mb-4">
+              <h2 className="card-title text-2xl mb-4 text-base text-black">
                 Just a few more details...
               </h2>
               <p className="text-base-content/70 mb-6">
@@ -352,13 +352,13 @@ const HomePage: React.FC = () => {
                       </svg>
                       <div className="flex-1">
                         <label className="label">
-                          <span className="label-text font-semibold text-base">
+                          <span className="label-text font-semibold text-black">
                             Question {index + 1}:
                           </span>
                         </label>
                         <p className="text-base-content mb-3">{question}</p>
                         <textarea
-                          className="textarea textarea-bordered w-full h-24 text-base"
+                          className="placeholder:text-gray-400 textarea border border-gray-200 h-20 text-base focus:outline-none focus:ring-0 w-full text-black text-sm resize-none !rounded-lg"
                           placeholder={`Your answer to question ${
                             index + 1
                           }...`}
@@ -402,7 +402,7 @@ const HomePage: React.FC = () => {
                   <Button
                     type="submit"
                     variant="primary"
-                    size="lg"
+                    size="sm"
                     disabled={questions.some(
                       (_, index) => !answers[index]?.trim()
                     )}
