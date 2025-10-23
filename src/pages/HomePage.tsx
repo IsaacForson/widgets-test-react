@@ -102,12 +102,31 @@ const HomePage: React.FC = () => {
       );
     };
 
-    recognitionInstance.onerror = () => {
+    recognitionInstance.onerror = (event: any) => {
       setIsListening(false);
       // Update with final transcript before stopping
       setUserDescription(finalTranscript);
       setRecognition(null);
-      alert("Voice input error. Please try again.");
+
+      // Provide specific error messages based on error type
+      let errorMessage = "Voice input error. Please try again.";
+
+      if (event.error === "no-speech") {
+        errorMessage = "No speech detected. Please try speaking again.";
+      } else if (event.error === "audio-capture") {
+        errorMessage =
+          "Microphone not found or not working. Please check your microphone.";
+      } else if (event.error === "not-allowed") {
+        errorMessage =
+          "Microphone permission denied. Please allow microphone access in your browser settings.";
+      } else if (event.error === "network") {
+        errorMessage = "Network error. Please check your internet connection.";
+      } else if (event.error === "aborted") {
+        // Don't show error if user manually stopped
+        return;
+      }
+
+      alert(errorMessage);
     };
 
     recognitionInstance.onend = () => {
@@ -302,7 +321,7 @@ const HomePage: React.FC = () => {
 
         {/* Slide 2: Follow-up Questions */}
         {step === "slide2" && (
-          <div className="card bg-base-100 shadow-xl">
+          <div className="card bg-base-100">
             <div className="card-body">
               <h2 className="card-title text-2xl mb-4">
                 Just a few more details...
