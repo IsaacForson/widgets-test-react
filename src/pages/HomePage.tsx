@@ -39,7 +39,7 @@ const HomePage: React.FC = () => {
   const [userDescription, setUserDescription] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [questions, setQuestions] = useState<string[]>([]);
-  const [answers, setAnswers] = useState("");
+  const [answers, setAnswers] = useState<Record<number, string>>({});
   const [chatbotDetails, setChatbotDetails] = useState<{
     chatLink: string;
     phoneNumber: string;
@@ -174,9 +174,11 @@ const HomePage: React.FC = () => {
   // Publish chatbot
   const publishChatbot = async () => {
     try {
+      // Combine all answers into a single string
+      const combinedAnswers = Object.values(answers).join(" | ");
       const result = await ChatbotService.publishChatbot(
         userDescription,
-        answers
+        combinedAnswers
       );
       setChatbotDetails(result);
       setStep("complete");
@@ -192,7 +194,7 @@ const HomePage: React.FC = () => {
     setStep("slide1");
     setUserDescription("");
     setQuestions([]);
-    setAnswers("");
+    setAnswers({});
     setChatbotDetails(null);
     setIsLoading(false);
   };
@@ -331,50 +333,48 @@ const HomePage: React.FC = () => {
                 perfect chatbot for you:
               </p>
 
-              <div className="space-y-4 mb-6">
+              <form onSubmit={handleSlide2Submit} className="space-y-6">
                 {questions.map((question, index) => (
-                  <div key={index} className="alert bg-base-200">
-                    <svg
-                      className="w-5 h-5 shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    <div className="flex-1">
-                      <span className="font-semibold">
-                        Question {index + 1}:
-                      </span>{" "}
-                      {question}
+                  <div key={index} className="space-y-3">
+                    <div className="flex items-start gap-3">
+                      <svg
+                        className="w-5 h-5 shrink-0 mt-1 text-primary"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                      <div className="flex-1">
+                        <label className="label">
+                          <span className="label-text font-semibold text-base">
+                            Question {index + 1}:
+                          </span>
+                        </label>
+                        <p className="text-base-content mb-3">{question}</p>
+                        <textarea
+                          className="textarea textarea-bordered w-full h-24 text-base"
+                          placeholder={`Your answer to question ${
+                            index + 1
+                          }...`}
+                          value={answers[index] || ""}
+                          onChange={(e) =>
+                            setAnswers((prev) => ({
+                              ...prev,
+                              [index]: e.target.value,
+                            }))
+                          }
+                          required
+                        />
+                      </div>
                     </div>
                   </div>
                 ))}
-              </div>
-
-              <form onSubmit={handleSlide2Submit} className="space-y-6">
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text font-medium">Your Answers</span>
-                  </label>
-                  <textarea
-                    className="textarea textarea-bordered h-48 text-base"
-                    placeholder="Please answer all the questions above in order..."
-                    value={answers}
-                    onChange={(e) => setAnswers(e.target.value)}
-                    required
-                  />
-                  <label className="label">
-                    <span className="label-text-alt text-base-content/60">
-                      Answer all questions above
-                    </span>
-                  </label>
-                </div>
 
                 <div className="card-actions justify-between">
                   <Button
@@ -402,8 +402,10 @@ const HomePage: React.FC = () => {
                   <Button
                     type="submit"
                     variant="primary"
-                    size="sm"
-                    disabled={!answers.trim()}
+                    size="lg"
+                    disabled={questions.some(
+                      (_, index) => !answers[index]?.trim()
+                    )}
                     icon={
                       <svg
                         className="w-5 h-5"
