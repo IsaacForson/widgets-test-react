@@ -432,10 +432,10 @@ const HomePage: React.FC = () => {
 
         {/* Publishing State */}
         {step === "publishing" && (
-          <div className="card bg-base-100 shadow-xl">
+          <div className="card bg-base-100">
             <div className="card-body items-center text-center py-12">
               <span className="loading loading-spinner loading-lg text-primary mb-4"></span>
-              <h2 className="text-2xl font-bold mb-2">
+              <h2 className="text-2xl font-bold mb-2 text-black">
                 Publishing your chatbot...
               </h2>
               <p className="text-base-content/70">
@@ -447,10 +447,10 @@ const HomePage: React.FC = () => {
 
         {/* Completion Screen */}
         {step === "complete" && chatbotDetails && (
-          <div className="card bg-base-100 shadow-xl">
+          <div className="card bg-base-100 ">
             <div className="card-body items-center text-center">
               <div className="text-6xl mb-4">🎉</div>
-              <h2 className="text-3xl font-bold mb-2">
+              <h2 className="text-3xl font-bold mb-2 text-black">
                 Your Chatbot is Ready!
               </h2>
               <p className="text-base-content/70 mb-8">
