@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Wizard Web Component Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .controls h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .btn-info {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 9998;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: block;
+        }
+
+        .modal-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -40%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .event-log {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .event-log h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .event-item {
+            padding: 12px;
+            margin-bottom: 8px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .event-item .time {
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        .event-item .type {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .inline-demo {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .inline-demo h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        #inline-wizard {
+            border: 2px dashed #e5e7eb;
+            border-radius: 8px;
+            padding: 10px;
+            min-height: 400px;
+        }
+    </style>
+
+    <!-- Load the Web Component -->
+    <link rel="stylesheet" href="./dist/chatbot-wizard.css">
+    <script src="./dist/chatbot-wizard.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Chatbot Wizard Web Component</h1>
+            <p>Embeddable AI Chatbot Builder for Any Framework</p>
+        </div>
+
+        <div class="controls">
+            <h2>🎮 Control Panel</h2>
+            <div class="button-group">
+                <button class="btn-primary" onclick="openModal()">
+                    Open in Modal
+                </button>
+                <button class="btn-info" onclick="toggleInline()">
+                    Toggle Inline Demo
+                </button>
+                <button class="btn-secondary" onclick="clearEvents()">
+                    Clear Event Log
+                </button>
+            </div>
+        </div>
+
+        <div class="inline-demo" id="inline-demo" style="display: none;">
+            <h3>📦 Inline Embedding Demo</h3>
+            <div id="inline-wizard"></div>
+        </div>
+
+        <div class="event-log">
+            <h3>📡 Event Log</h3>
+            <div id="event-log"></div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <chatbot-wizard id="modal-wizard"></chatbot-wizard>
+        </div>
+    </div>
+
+    <script>
+        let wizardInstance = null;
+
+        function logEvent(type, detail) {
+            const log = document.getElementById('event-log');
+            const time = new Date().toLocaleTimeString();
+            const item = document.createElement('div');
+            item.className = 'event-item';
+            item.innerHTML = `
+        <div class="time">${time}</div>
+        <div><span class="type">${type}</span></div>
+        <div>${JSON.stringify(detail, null, 2)}</div>
+      `;
+            log.insertBefore(item, log.firstChild);
+        }
+
+        function openModal() {
+            const overlay = document.getElementById('modal-overlay');
+            const wizard = document.getElementById('modal-wizard');
+            overlay.classList.add('active');
+            logEvent('modal-opened', { message: 'Modal wizard opened' });
+
+            // Listen for events
+            wizard.addEventListener('chatbot-complete', handleComplete);
+            wizard.addEventListener('chatbot-close', handleClose);
+        }
+
+        function closeModal() {
+            const overlay = document.getElementById('modal-overlay');
+            const wizard = document.getElementById('modal-wizard');
+            overlay.classList.remove('active');
+            logEvent('modal-closed', { message: 'Modal wizard closed' });
+
+            // Remove listeners
+            wizard.removeEventListener('chatbot-complete', handleComplete);
+            wizard.removeEventListener('chatbot-close', handleClose);
+        }
+
+        function toggleInline() {
+            const demo = document.getElementById('inline-demo');
+            const container = document.getElementById('inline-wizard');
+
+            if (demo.style.display === 'none') {
+                demo.style.display = 'block';
+
+                // Create wizard if not exists
+                if (!wizardInstance) {
+                    wizardInstance = document.createElement('chatbot-wizard');
+                    wizardInstance.id = 'inline-wizard-component';
+                    container.appendChild(wizardInstance);
+
+                    // Listen for events
+                    wizardInstance.addEventListener('chatbot-complete', handleComplete);
+                    wizardInstance.addEventListener('chatbot-close', () => {
+                        demo.style.display = 'none';
+                        handleClose();
+                    });
+
+                    logEvent('inline-created', { message: 'Inline wizard created' });
+                }
+            } else {
+                demo.style.display = 'none';
+                logEvent('inline-hidden', { message: 'Inline wizard hidden' });
+            }
+        }
+
+        function handleComplete(event) {
+            logEvent('chatbot-complete', event.detail);
+            alert('Chatbot Created!\n\nChat Link: ' + event.detail.chatLink + '\nPhone: ' + event.detail.phoneNumber);
+        }
+
+        function handleClose(event) {
+            logEvent('chatbot-close', { message: 'User requested to close wizard' });
+            closeModal();
+        }
+
+        function clearEvents() {
+            document.getElementById('event-log').innerHTML = '';
+            logEvent('log-cleared', { message: 'Event log cleared' });
+        }
+
+        // Log initial load
+        window.addEventListener('DOMContentLoaded', () => {
+            logEvent('page-loaded', { message: 'Demo page ready' });
+        });
+    </script>
+</body>
+
+</html>

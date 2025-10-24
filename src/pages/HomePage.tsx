@@ -1,296 +1,367 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { TextInput, TextareaInput } from "halo-widgets/react";
-import { WidgetRecommendationService } from "../services/widgetRecommendationService";
+import Button from "../components/Button";
+import { ChatbotWizardService } from "../services/chatbotWizardService";
+
+type WizardStep = "slide1" | "slide2" | "publishing" | "complete";
 
 const HomePage: React.FC = () => {
-  const [title, setTitle] = useState("");
-  const [prompt, setPrompt] = useState("");
+  const [step, setStep] = useState<WizardStep>("slide1");
+  const [userDescription, setUserDescription] = useState("");
+  const [isListening, setIsListening] = useState(false);
+  const [sessionId, setSessionId] = useState<string>("");
+  const [questions, setQuestions] = useState<string[]>([]);
+  const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [chatbotDetails, setChatbotDetails] = useState<{
+    chatbotId: string;
+    chatLink: string;
+    phoneNumber: string;
+    chatbotConfig?: {
+      id: string;
+      name: string;
+      description: string;
+      personality: string;
+      capabilities: string[];
+    };
+  } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const [recognition, setRecognition] = useState<any>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Voice input handler (using Web Speech API)
+  const handleVoiceInput = () => {
+    // If already listening, stop
+    if (isListening && recognition) {
+      recognition.stop();
+      return;
+    }
+    if (
+      !("webkitSpeechRecognition" in window) &&
+      !("SpeechRecognition" in window)
+    ) {
+      alert(
+        "Voice input is not supported in your browser. Please use Chrome or Edge."
+      );
+      return;
+    }
+
+    const SpeechRecognition =
+      (window as any).SpeechRecognition ||
+      (window as any).webkitSpeechRecognition;
+    const recognitionInstance = new SpeechRecognition();
+    setRecognition(recognitionInstance);
+
+    recognitionInstance.continuous = true; // Keep listening
+    recognitionInstance.interimResults = true; // Show results as you speak
+    recognitionInstance.lang = "en-US";
+
+    let finalTranscript = userDescription; // Keep track of final text
+
+    recognitionInstance.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognitionInstance.onresult = (event: any) => {
+      let interimTranscript = "";
+
+      // Loop through all results
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+
+        if (event.results[i].isFinal) {
+          // Add final result with a space
+          finalTranscript += (finalTranscript ? " " : "") + transcript;
+        } else {
+          // Show interim result
+          interimTranscript += transcript;
+        }
+      }
+
+      // Update the textarea with both final and interim results
+      setUserDescription(
+        finalTranscript + (interimTranscript ? " " + interimTranscript : "")
+      );
+    };
+
+    recognitionInstance.onerror = (event: any) => {
+      setIsListening(false);
+      // Update with final transcript before stopping
+      setUserDescription(finalTranscript);
+      setRecognition(null);
+
+      // Provide specific error messages based on error type
+      let errorMessage = "Voice input error. Please try again.";
+
+      if (event.error === "no-speech") {
+        errorMessage = "No speech detected. Please try speaking again.";
+      } else if (event.error === "audio-capture") {
+        errorMessage =
+          "Microphone not found or not working. Please check your microphone.";
+      } else if (event.error === "not-allowed") {
+        errorMessage =
+          "Microphone permission denied. Please allow microphone access in your browser settings.";
+      } else if (event.error === "network") {
+        errorMessage = "Network error. Please check your internet connection.";
+      } else if (event.error === "aborted") {
+        // Don't show error if user manually stopped
+        return;
+      }
+
+      alert(errorMessage);
+    };
+
+    recognitionInstance.onend = () => {
+      setIsListening(false);
+      // Ensure final transcript is saved
+      setUserDescription(finalTranscript);
+      setRecognition(null);
+    };
+
+    recognitionInstance.start();
+  };
+
+  // Handle Slide 1 submission
+  const handleSlide1Submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError(null);
 
     try {
-      const response = await WidgetRecommendationService.getRecommendations({
-        userIntent: prompt,
-        context: title,
-      });
+      const result = await ChatbotWizardService.submitStep1(userDescription);
 
-      // Navigate to wizard page with the response data
-      navigate("/wizard", {
-        state: {
-          wizardData: response,
-          userIntent: prompt,
-          context: title,
-        },
-      });
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "An unexpected error occurred"
-      );
+      // Store sessionId for step 2
+      setSessionId(result.sessionId);
+
+      if (!result.needsMoreInfo) {
+        // Skip to publishing - no follow-up questions needed
+        setStep("publishing");
+        await publishChatbot();
+      } else {
+        // Show follow-up questions
+        setQuestions(result.questions || []);
+        setStep("slide2");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  return (
-    <div className="p-4">
-      {/**
-       * Original homepage content commented out (do not delete)
-       */}
-      {/**
-      <div className="dynamic-page">
-        <div className="page-container">
-          <header className="page-header">
-            <h1>🎨 Manifest-Driven Pages</h1>
-            <p>Dynamic page generation using Halo Widgets and JSON manifests</p>
-          </header>
+  // Handle Slide 2 submission
+  const handleSlide2Submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStep("publishing");
+    await publishChatbot();
+  };
 
-          <div className="dynamic-form">
-            <div className="form-section">
-              <h2>Available Pages</h2>
-              <p>
-                All pages below are generated dynamically from manifest
-                configurations:
+  // Publish chatbot
+  const publishChatbot = async () => {
+    try {
+      // Combine all answers into a single string
+      const combinedAnswers = Object.values(answers).join(" | ");
+      const result = await ChatbotWizardService.submitStep2(
+        sessionId,
+        combinedAnswers
+      );
+      setChatbotDetails({
+        chatbotId: result.chatbotId,
+        chatLink: result.chatLink,
+        phoneNumber: result.phoneNumber,
+        chatbotConfig: result.chatbotConfig,
+      });
+      setStep("complete");
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Publishing failed. Please try again.");
+      setStep(questions.length > 0 ? "slide2" : "slide1");
+    }
+  };
+
+  // Reset wizard
+  const handleReset = () => {
+    setStep("slide1");
+    setUserDescription("");
+    setSessionId("");
+    setQuestions([]);
+    setAnswers({});
+    setChatbotDetails(null);
+    setIsLoading(false);
+  };
+
+  return (
+    <div className="bg-base-200 p-4">
+      <div className=" mx-auto">
+        {/* Header */}
+        {/*   <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-base-content mb-2">
+            🤖 Chatbot Builder
+          </h1>
+          <p className="text-base-content/70">
+            Create your AI chatbot in just 2 simple steps
+          </p>
+        </div> */}
+
+        {/* Slide 1: Initial Intent Capture */}
+        {step === "slide1" && (
+          <div className="card bg-base-100">
+            <div className="card-body">
+              <h2 className="card-title text-2xl mb-3 text-black text-base">
+                Tell me about the agent you want
+              </h2>
+              <p className="text-base-content/70 ">
+                Describe your chatbot idea in your own words. The more details
+                you provide, the better!
               </p>
 
-              <div style={{ display: "grid", gap: "1rem", marginTop: "2rem" }}>
-                <Link
-                  to="/signup"
-                  className="submit-button"
-                  style={{
-                    textDecoration: "none",
-                    textAlign: "center",
-                    display: "block",
-                  }}
-                >
-                  📝 Signup Page
-                </Link>
-
-                <Link
-                  to="/signin"
-                  className="submit-button"
-                  style={{
-                    textDecoration: "none",
-                    textAlign: "center",
-                    display: "block",
-                  }}
-                >
-                  🔐 Signin Page
-                </Link>
-
-                <Link
-                  to="/contact"
-                  className="submit-button"
-                  style={{
-                    textDecoration: "none",
-                    textAlign: "center",
-                    display: "block",
-                  }}
-                >
-                  📧 Contact Form
-                </Link>
-
-                <Link
-                  to="/survey"
-                  className="submit-button"
-                  style={{
-                    textDecoration: "none",
-                    textAlign: "center",
-                    display: "block",
-                  }}
-                >
-                  📊 User Survey
-                </Link>
-              </div>
-            </div>
-
-            <div className="form-section">
-              <h2>How It Works</h2>
-              <div
-                style={{ textAlign: "left", color: "#4a5568", lineHeight: "1.6" }}
-              >
-                <p>
-                  <strong>1. Pure Dynamic:</strong> No static pages exist. All
-                  pages are generated dynamically from manifest configurations at
-                  runtime.
-                </p>
-
-                <p>
-                  <strong>2. URL-Based Loading:</strong> Simply visit /
-                  {`{manifestId}`} to load any manifest. The system automatically
-                  fetches and renders the page.
-                </p>
-
-                <p>
-                  <strong>3. AI-Ready:</strong> External AI can generate manifests
-                  and instantly create new pages without any code deployment.
-                </p>
-
-                <p>
-                  <strong>4. Complete Widget Support:</strong> All Halo widgets
-                  supported - text, email, phone, date, number, slider, radio,
-                  checkbox, dropdown, textarea, and location inputs.
-                </p>
-              </div>
-            </div>
-
-            <div className="form-section">
-              <h2>Benefits</h2>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-                  gap: "1rem",
-                }}
-              >
-                <div
-                  style={{
-                    padding: "1rem",
-                    background: "#f7fafc",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <h3 style={{ margin: "0 0 0.5rem", color: "#2d3748" }}>
-                    🚀 No Code Duplication
-                  </h3>
-                  <p style={{ margin: 0, fontSize: "0.9rem", color: "#718096" }}>
-                    One engine handles all forms
-                  </p>
+              <form onSubmit={handleSlide1Submit} className="space-y-3">
+                <div className="form-control">
+                  <textarea
+                    className="placeholder:text-gray-400 textarea border border-gray-200 h-40 text-base focus:outline-none focus:ring-0 w-full text-black text-sm resize-none !rounded-lg"
+                    placeholder="Example: I want a customer support chatbot for my e-commerce store that can help customers track orders, answer product questions, and handle returns..."
+                    value={userDescription}
+                    onChange={(e) => setUserDescription(e.target.value)}
+                    required
+                  />
                 </div>
 
-                <div
-                  style={{
-                    padding: "1rem",
-                    background: "#f7fafc",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <h3 style={{ margin: "0 0 0.5rem", color: "#2d3748" }}>
-                    ⚡ Dynamic Content
-                  </h3>
-                  <p style={{ margin: 0, fontSize: "0.9rem", color: "#718096" }}>
-                    AI-generated pages on demand
-                  </p>
+                <div className="flex items-center gap-4">
+                  <Button
+                    variant={isListening ? "danger" : "secondary"}
+                    size="sm"
+                    onClick={handleVoiceInput}
+                    icon={
+                      isListening ? (
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"
+                          />
+                        </svg>
+                      ) : (
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+                          />
+                        </svg>
+                      )
+                    }
+                  >
+                    {isListening ? "Stop Listening" : "Click to Talk"}
+                  </Button>
+
+                  <div className="text-sm text-base-content/60">
+                    {isListening
+                      ? "Speak now - text appears as you talk"
+                      : "or type your description above"}
+                  </div>
                 </div>
 
-                <div
-                  style={{
-                    padding: "1rem",
-                    background: "#f7fafc",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <h3 style={{ margin: "0 0 0.5rem", color: "#2d3748" }}>
-                    🎯 Type Safe
-                  </h3>
-                  <p style={{ margin: 0, fontSize: "0.9rem", color: "#718096" }}>
-                    Full TypeScript support
-                  </p>
+                <div className="card-actions justify-end mt-6">
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    size="sm"
+                    disabled={!userDescription.trim()}
+                    loading={isLoading}
+                    icon={
+                      !isLoading && (
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      )
+                    }
+                  >
+                    {isLoading ? "Analyzing..." : "Continue"}
+                  </Button>
                 </div>
-
-                <div
-                  style={{
-                    padding: "1rem",
-                    background: "#f7fafc",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <h3 style={{ margin: "0 0 0.5rem", color: "#2d3748" }}>
-                    🎨 Consistent UX
-                  </h3>
-                  <p style={{ margin: 0, fontSize: "0.9rem", color: "#718096" }}>
-                    Unified design system
-                  </p>
-                </div>
-              </div>
+              </form>
             </div>
           </div>
-        </div>
-      </div>
-      */}
+        )}
 
-      <div className="max-w-2xl mx-auto">
-        <div className="card bg-base-100 shadow-md">
-          <div className="card-body">
-            <h2 className="card-title text-black">Wizard Builder Prompt</h2>
+        {/* Slide 2: Follow-up Questions */}
+        {step === "slide2" && (
+          <div className="card bg-base-100">
+            <div className="card-body">
+              <h2 className="card-title text-2xl mb-4 text-base text-black">
+                Just a few more details...
+              </h2>
+              <p className="text-base-content/70 mb-6">
+                Please answer the following questions to help us create the
+                perfect chatbot for you:
+              </p>
 
-            {error && (
-              <div className="alert alert-error mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="stroke-current shrink-0 h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <span>{error}</span>
-              </div>
-            )}
-
-            <form className="grid gap-4" onSubmit={handleSubmit}>
-              <TextInput
-                label="Context"
-                placeholder="Enter the context (e.g., Annual benefits enrollment with spouse and children)"
-                value={title}
-                onChange={(v) => setTitle(v)}
-                required={true}
-                className="w-full"
-              />
-              <TextareaInput
-                label="User Prompt"
-                placeholder="Describe what you want to accomplish (e.g., I want to enroll in health insurance and add my family)"
-                value={prompt}
-                onChange={(v) => setPrompt(v)}
-                rows={6}
-                required={true}
-                className="w-full"
-              />
-              <div className="card-actions justify-end">
-                <button
-                  type="submit"
-                  className={`py-3 px-6 inline-flex items-center gap-2 text-sm font-medium rounded-lg border bg-base-100 border-base-300 text-base-content/70 hover:bg-white hover:border-primary/20 hover:text-primary transition-all duration-200 ${
-                    isLoading
-                      ? "bg-base-200 border-base-300 text-base-content/60 cursor-not-allowed"
-                      : ""
-                  }`}
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                          fill="none"
+              <form onSubmit={handleSlide2Submit} className="space-y-6">
+                {questions.map((question, index) => (
+                  <div key={index} className="space-y-3">
+                    <div className="flex items-start gap-3">
+                      <div className="flex-1">
+                        <label className="label">
+                          <span className="label-text font-semibold text-black">
+                            Question {index + 1}:
+                          </span>
+                        </label>
+                        <p className="text-base-content mb-3 text-sm">
+                          {question}
+                        </p>
+                        <textarea
+                          className="placeholder:text-gray-400 textarea border border-gray-200 h-20 text-base focus:outline-none focus:ring-0 w-full text-black text-sm resize-none !rounded-lg"
+                          placeholder={`Your answer to question ${
+                            index + 1
+                          }...`}
+                          value={answers[index] || ""}
+                          onChange={(e) =>
+                            setAnswers((prev) => ({
+                              ...prev,
+                              [index]: e.target.value,
+                            }))
+                          }
+                          required
                         />
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        />
-                      </svg>
-                      Generating Please wait...
-                    </>
-                  ) : (
-                    <>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                <div className="card-actions justify-between">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setStep("slide1")}
+                    icon={
                       <svg
-                        className="w-4 h-4"
+                        className="w-5 h-5"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -299,17 +370,226 @@ const HomePage: React.FC = () => {
                           strokeLinecap="round"
                           strokeLinejoin="round"
                           strokeWidth={2}
-                          d="M13 10V3L4 14h7v7l9-11h-7z"
+                          d="M15 19l-7-7 7-7"
                         />
                       </svg>
-                      Generate
-                    </>
-                  )}
-                </button>
-              </div>
-            </form>
+                    }
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    size="sm"
+                    disabled={questions.some(
+                      (_, index) => !answers[index]?.trim()
+                    )}
+                    icon={
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    }
+                  >
+                    Create Chatbot
+                  </Button>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Publishing State */}
+        {step === "publishing" && (
+          <div className="card bg-base-100">
+            <div className="card-body items-center text-center py-12">
+              <span className="loading loading-spinner loading-lg text-primary mb-4"></span>
+              <h2 className="text-2xl font-bold mb-2 text-black">
+                Publishing your chatbot...
+              </h2>
+              <p className="text-base-content/70">
+                This will only take a moment. Please wait.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Completion Screen */}
+        {step === "complete" && chatbotDetails && (
+          <div className="card bg-base-100">
+            <div className="card-body">
+              <div className="text-center mb-6">
+                <div className="text-6xl mb-4">🎉</div>
+                <h2 className="text-3xl font-bold mb-2 text-black">
+                  Your Chatbot is Ready!
+                </h2>
+                <p className="text-base-content/70">
+                  Your chatbot has been successfully published. You can now
+                  start using it!
+                </p>
+              </div>
+
+              {/* Access Methods - Same Line */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                {/* Chat Link */}
+                <div className="alert alert-info">
+                  <svg
+                    className="w-6 h-6 shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                    />
+                  </svg>
+                  <div className="flex-1 text-center">
+                    <div className="font-semibold mb-1">Chat Interface</div>
+                    <a
+                      href={chatbotDetails.chatLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="link link-primary break-all text-sm"
+                    >
+                      {chatbotDetails.chatLink}
+                    </a>
+                  </div>
+                </div>
+
+                {/* Phone Number */}
+                <div className="alert alert-success">
+                  <svg
+                    className="w-6 h-6 shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                    />
+                  </svg>
+                  <div className="flex-1 text-center">
+                    <div className="font-semibold mb-1">Voice Access</div>
+                    <div className="text-lg font-mono">
+                      {chatbotDetails.phoneNumber}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Chatbot Configuration Details */}
+              {chatbotDetails.chatbotConfig && (
+                <div className="space-y-4">
+                  <h3 className="text-xl font-bold text-black">
+                    Chatbot Details
+                  </h3>
+
+                  {/* Name & Description */}
+                  <div className="bg-base-200 p-4 rounded-lg">
+                    <h4 className="font-semibold text-black mb-2">
+                      {chatbotDetails.chatbotConfig.name}
+                    </h4>
+                    <p className="text-sm text-base-content/70">
+                      {chatbotDetails.chatbotConfig.description}
+                    </p>
+                  </div>
+
+                  {/* Personality */}
+                  <div
+                    className="my-4"
+                    style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                  >
+                    <h4 className="font-semibold text-black text-sm">
+                      Personality
+                    </h4>
+                    <p className="text-sm text-base-content/70">
+                      {chatbotDetails.chatbotConfig.personality}
+                    </p>
+                  </div>
+
+                  {/* Capabilities */}
+                  {chatbotDetails.chatbotConfig.capabilities &&
+                    chatbotDetails.chatbotConfig.capabilities.length > 0 && (
+                      <div className="mb-4">
+                        <h4 className="font-semibold text-black mb-2 text-sm">
+                          Capabilities
+                        </h4>
+                        <ul
+                          className="list-disc list-inside space-y-1"
+                          style={{ marginLeft: "13px" }}
+                        >
+                          {chatbotDetails.chatbotConfig.capabilities.map(
+                            (capability, idx) => (
+                              <li
+                                key={idx}
+                                className="text-sm text-base-content/70"
+                              >
+                                {capability}
+                              </li>
+                            )
+                          )}
+                        </ul>
+                      </div>
+                    )}
+                </div>
+              )}
+
+              <div className="card-actions mt-8">
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={handleReset}
+                  icon={
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4v16m8-8H4"
+                      />
+                    </svg>
+                  }
+                >
+                  Create Another Chatbot
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Step Indicator */}
+        {(step === "slide1" || step === "slide2") && (
+          <div className="text-center mt-6">
+            <div className="text-sm text-base-content/60">
+              Step {step === "slide1" ? "1" : "2"} of 2
+            </div>
+            <progress
+              className="progress progress-primary w-64 mt-2"
+              value={step === "slide1" ? 50 : 100}
+              max="100"
+            ></progress>
+          </div>
+        )}
       </div>
     </div>
   );

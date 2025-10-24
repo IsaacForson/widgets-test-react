@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit --skipLibCheck && vite build",
+    "build:webcomponent": "tsc --noEmit --skipLibCheck && vite build --mode webcomponent",
+    "package": "npm run build:webcomponent && node scripts/package.js",
+    "deploy:netlify": "npm run build:webcomponent && netlify deploy --prod --dir=dist",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -25,6 +28,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
+    "terser": "^5.44.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.45.0",
     "vite": "^7.1.7"
