@@ -1,0 +1,134 @@
+/* Base button styles */
+.custom-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-family: inherit;
+  outline: none;
+}
+
+.custom-button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.custom-button:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.custom-button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* Size variants */
+.custom-button-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.custom-button-md {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+}
+
+.custom-button-lg {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+}
+
+/* Primary variant */
+.custom-button-primary {
+  background-color: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.custom-button-primary:hover:not(:disabled) {
+  background-color: #2563eb;
+  border-color: #2563eb;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.custom-button-primary:disabled {
+  background-color: #93c5fd;
+  border-color: #93c5fd;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: not-allowed;
+}
+
+/* Secondary variant */
+.custom-button-secondary {
+  background-color: white;
+  color: #1f2937;
+  border-color: #d1d5db;
+}
+
+.custom-button-secondary:hover:not(:disabled) {
+  background-color: #f9fafb;
+  border-color: #3b82f6;
+  color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.custom-button-secondary:disabled {
+  background-color: #f3f4f6;
+  border-color: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Danger variant */
+.custom-button-danger {
+  background-color: #ef4444;
+  color: white;
+  border-color: #ef4444;
+}
+
+.custom-button-danger:hover:not(:disabled) {
+  background-color: #dc2626;
+  border-color: #dc2626;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+.custom-button-danger:disabled {
+  background-color: #fca5a5;
+  border-color: #fca5a5;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: not-allowed;
+}
+
+/* Loading spinner */
+.button-spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Icon wrapper */
+.button-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.button-icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+

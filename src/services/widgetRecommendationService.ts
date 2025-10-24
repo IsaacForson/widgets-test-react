@@ -21,19 +21,23 @@ export interface WidgetRecommendationResponse {
 }
 
 const API_BASE_URL = "https://enhanced-experience-platform.onrender.com";
+// const API_BASE_URL_LOCAL = "http://localhost:3000";
 
 export class WidgetRecommendationService {
   static async getRecommendations(
     request: WidgetRecommendationRequest
   ): Promise<WidgetRecommendationResponse> {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/widgets/recommend`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(request),
-      });
+      const response = await fetch(
+        `${API_BASE_URL}/api/widgets/recommend`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(request),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
