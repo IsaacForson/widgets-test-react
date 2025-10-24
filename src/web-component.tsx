@@ -4,31 +4,8 @@
  * that can be embedded in any framework (Angular, Vue, plain HTML, etc.)
  */
 
-// Load Tailwind CSS with DaisyUI from CDN
-// Using Tailwind Play CDN for proper JIT compilation
-const loadExternalStyles = () => {
-  // Load Tailwind Play CDN
-  if (!document.querySelector('script[src*="cdn.tailwindcss.com"]')) {
-    const tailwindScript = document.createElement("script");
-    tailwindScript.src = "https://cdn.tailwindcss.com";
-    document.head.appendChild(tailwindScript);
-  }
-
-  // Load DaisyUI
-  if (!document.querySelector('link[href*="daisyui"]')) {
-    const daisyUILink = document.createElement("link");
-    daisyUILink.href =
-      "https://cdn.jsdelivr.net/npm/daisyui@5/dist/full.min.css";
-    daisyUILink.rel = "stylesheet";
-    daisyUILink.type = "text/css";
-    document.head.appendChild(daisyUILink);
-  }
-};
-
-// Load external styles immediately
-loadExternalStyles();
-
 // Import ALL CSS files to ensure they're bundled
+// All Tailwind and DaisyUI classes are pre-compiled in DaisyUICompiled.css
 import "./components/DaisyUICompiled.css"; // Compiled DaisyUI + Tailwind classes FIRST
 import "./index.css";
 import "./MainApp.css";

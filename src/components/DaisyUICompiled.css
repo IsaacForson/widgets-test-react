@@ -23,6 +23,21 @@
   line-height: 1.75rem;
 }
 
+/* Label styles */
+.label {
+  display: flex;
+  user-select: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.label-text {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
 /* DaisyUI Badge */
 .badge {
   display: inline-flex;
@@ -63,8 +78,8 @@
   line-height: 1.5rem;
   border-radius: 0.5rem;
   border-width: 1px;
-  border-color: transparent;
-  background-color: #f3f4f6;
+  border-color: #e5e7eb;
+  background-color: white !important;
   min-height: 3rem;
   resize: vertical;
 }
@@ -72,6 +87,8 @@
 .textarea:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
+  border-color: #e5e7eb;
+  background-color: #ffffff;
 }
 
 /* DaisyUI Join (Button Group) */
@@ -148,14 +165,14 @@
 /* DaisyUI Progress */
 .progress {
   position: relative;
-  width: 100%;
+  width: 16rem; /* Fixed width for progress bar */
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
   overflow: hidden;
   height: 0.5rem;
   border-radius: 0.25rem;
-  background-color: #e5e7eb;
+  background-color: #cbd5e1 !important; /* Light gray for unfilled portion */
 }
 
 .progress-primary::-webkit-progress-value {
@@ -345,6 +362,7 @@
 
 .text-base-content\/70 {
   color: rgba(31, 41, 55, 0.7);
+  margin-bottom: 0.5rem;
 }
 
 .text-base-content\/60 {
@@ -527,16 +545,16 @@
   color: #9ca3af;
 }
 
-/* Progress bar colors */
+/* Progress bar colors - Green for filled, light gray for unfilled */
 .progress::-webkit-progress-value {
-  background-color: #22c55e;
+  background-color: #22c55e; /* Green for completed portion */
 }
 
 .progress::-moz-progress-bar {
-  background-color: #22c55e;
+  background-color: #22c55e; /* Green for completed portion */
 }
 
 .progress {
-  background-color: #e5e7eb;
+  background-color: #cbd5e1; /* Light gray for remaining portion */
 }
 
