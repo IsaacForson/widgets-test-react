@@ -179,8 +179,8 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="bg-base-200 p-4 md:p-8">
-      <div className="max-w-3xl mx-auto">
+    <div className="bg-base-200 p-4">
+      <div className=" mx-auto">
         {/* Header */}
       {/*   <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-base-content mb-2">

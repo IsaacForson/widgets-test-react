@@ -77,41 +77,8 @@ interface ChatbotWizardWrapperProps {
   onClose?: () => void;
 }
 
-const ChatbotWizardWrapper: React.FC<ChatbotWizardWrapperProps> = ({
-  //   onComplete,
-  onClose,
-}) => {
-  return (
-    <div style={{ position: "relative" }}>
-      {/* Close button for embedding contexts */}
-      {onClose && (
-        <button
-          onClick={onClose}
-          style={{
-            position: "absolute",
-            top: "10px",
-            right: "10px",
-            zIndex: 1000,
-            background: "#ef4444",
-            color: "white",
-            border: "none",
-            borderRadius: "50%",
-            width: "32px",
-            height: "32px",
-            cursor: "pointer",
-            fontSize: "18px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          aria-label="Close"
-        >
-          ×
-        </button>
-      )}
-      <HomePage />
-    </div>
-  );
+const ChatbotWizardWrapper: React.FC<ChatbotWizardWrapperProps> = () => {
+  return <HomePage />;
 };
 
 // Define the custom element
