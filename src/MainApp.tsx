@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import WidgetsPage from "./pages/WidgetsPage";
 import GenericDynamicPage from "./pages/GenericDynamicPage";
@@ -10,7 +10,7 @@ function MainApp() {
   return (
     <Router>
       <div className="main-app">
-        <nav className="main-nav">
+       {/*  <nav className="main-nav">
           <div className="nav-container">
             <Link to="/" className="nav-brand">
               🤖 Chatbot Builder
@@ -24,7 +24,7 @@ function MainApp() {
               </Link>
             </div>
           </div>
-        </nav>
+        </nav> */}
 
         <main className="main-content">
           <Routes>

@@ -182,20 +182,20 @@ const HomePage: React.FC = () => {
     <div className="min-h-screen bg-base-200 p-4 md:p-8">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
+      {/*   <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-base-content mb-2">
             🤖 Chatbot Builder
           </h1>
           <p className="text-base-content/70">
             Create your AI chatbot in just 2 simple steps
           </p>
-        </div>
+        </div> */}
 
         {/* Slide 1: Initial Intent Capture */}
         {step === "slide1" && (
           <div className="card bg-base-100">
             <div className="card-body">
-              <h2 className="card-title text-2xl mb-4 text-black text-base">
+              <h2 className="card-title text-2xl mb-3 text-black text-base">
                 Tell me about the agent you want
               </h2>
               <p className="text-base-content/70 ">
