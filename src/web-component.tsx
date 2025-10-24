@@ -29,6 +29,7 @@ const loadExternalStyles = () => {
 loadExternalStyles();
 
 // Import ALL CSS files to ensure they're bundled
+import "./components/DaisyUICompiled.css"; // Compiled DaisyUI + Tailwind classes FIRST
 import "./index.css";
 import "./MainApp.css";
 import "./components/Button.css";
