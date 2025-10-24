@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import Button from "../components/Button";
-import { GeminiService } from "../services/geminiService";
+import { ChatbotWizardService } from "../services/chatbotWizardService";
 
 type WizardStep = "slide1" | "slide2" | "publishing" | "complete";
 
@@ -9,6 +9,7 @@ const HomePage: React.FC = () => {
   const [step, setStep] = useState<WizardStep>("slide1");
   const [userDescription, setUserDescription] = useState("");
   const [isListening, setIsListening] = useState(false);
+  const [sessionId, setSessionId] = useState<string>("");
   const [questions, setQuestions] = useState<string[]>([]);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [chatbotDetails, setChatbotDetails] = useState<{
@@ -116,15 +117,18 @@ const HomePage: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const result = await GeminiService.evaluateIntent(userDescription);
+      const result = await ChatbotWizardService.submitStep1(userDescription);
 
-      if (result.isEnough) {
-        // Skip to publishing
+      // Store sessionId for step 2
+      setSessionId(result.sessionId);
+
+      if (!result.needsMoreInfo) {
+        // Skip to publishing - no follow-up questions needed
         setStep("publishing");
         await publishChatbot();
       } else {
         // Show follow-up questions
-        setQuestions(result.questions);
+        setQuestions(result.questions || []);
         setStep("slide2");
       }
     } catch (error) {
@@ -147,11 +151,14 @@ const HomePage: React.FC = () => {
     try {
       // Combine all answers into a single string
       const combinedAnswers = Object.values(answers).join(" | ");
-      const result = await GeminiService.publishChatbot(
-        userDescription,
+      const result = await ChatbotWizardService.submitStep2(
+        sessionId,
         combinedAnswers
       );
-      setChatbotDetails(result);
+      setChatbotDetails({
+        chatLink: result.chatLink,
+        phoneNumber: result.phoneNumber,
+      });
       setStep("complete");
     } catch (error) {
       console.error("Error:", error);
@@ -164,6 +171,7 @@ const HomePage: React.FC = () => {
   const handleReset = () => {
     setStep("slide1");
     setUserDescription("");
+    setSessionId("");
     setQuestions([]);
     setAnswers({});
     setChatbotDetails(null);
@@ -456,7 +464,7 @@ const HomePage: React.FC = () => {
                       {chatbotDetails.chatLink}
                     </a>
                   </div>
-                </div>
+              </div>
 
                 {/* Phone Number */}
                 <div className="alert alert-success">
@@ -521,7 +529,7 @@ const HomePage: React.FC = () => {
               value={step === "slide1" ? 50 : 100}
               max="100"
             ></progress>
-          </div>
+        </div>
         )}
       </div>
     </div>
