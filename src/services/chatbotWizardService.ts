@@ -24,7 +24,8 @@ export interface ChatbotStep2Response {
   phoneNumber: string;
 }
 
-const API_BASE_URL = "http://localhost:3007";
+const API_BASE_URL = "https://enhanced-experience-platform.onrender.com";
+// const API_BASE_URL = "http://localhost:3007";
 
 export class ChatbotWizardService {
   /**
