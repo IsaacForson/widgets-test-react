@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import HomePage from "./pages/HomePage";
-import "./index.css";
 
 /**
  * Web Component wrapper for the Chatbot Wizard
@@ -16,30 +15,13 @@ import "./index.css";
  */
 class ChatbotWizardElement extends HTMLElement {
   private root: ReactDOM.Root | null = null;
-  private mountPoint: HTMLDivElement | null = null;
-
-  constructor() {
-    super();
-    // Attach shadow DOM for style isolation
-    this.attachShadow({ mode: "open" });
-  }
 
   connectedCallback() {
-    // Create mount point for React
-    this.mountPoint = document.createElement("div");
-    this.mountPoint.style.cssText = "width: 100%; height: 100%;";
+    // Set DaisyUI theme attribute
+    this.setAttribute("data-theme", "light");
 
-    // Create style element to inject CSS
-    const styleLink = document.createElement("link");
-    styleLink.rel = "stylesheet";
-    styleLink.href = this.getAttribute("css-url") || "";
-
-    // Append to shadow DOM
-    this.shadowRoot?.appendChild(styleLink);
-    this.shadowRoot?.appendChild(this.mountPoint);
-
-    // Mount React app
-    this.root = ReactDOM.createRoot(this.mountPoint);
+    // Mount React app directly to this element
+    this.root = ReactDOM.createRoot(this);
     this.renderReactApp();
   }
 
@@ -96,7 +78,7 @@ interface ChatbotWizardWrapperProps {
 }
 
 const ChatbotWizardWrapper: React.FC<ChatbotWizardWrapperProps> = ({
-//   onComplete,
+  //   onComplete,
   onClose,
 }) => {
   return (

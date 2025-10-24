@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Chatbot Wizard Web Component</title>
+
+    <!-- 
+        NOTE: Tailwind CSS and DaisyUI are automatically loaded by the Web Component!
+        You don't need to include them separately.
+    -->
+
+    <!-- Load the CSS -->
+    <link rel="stylesheet" href="./dist/chatbot-wizard.css">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🤖 Chatbot Wizard - Web Component Test</h1>
+
+        <!-- The Web Component -->
+        <chatbot-wizard></chatbot-wizard>
+    </div>
+
+    <!-- Load the JavaScript -->
+    <script src="./dist/chatbot-wizard.js"></script>
+
+    <script>
+        // Listen for events
+        const wizard = document.querySelector('chatbot-wizard');
+
+        wizard.addEventListener('chatbot-complete', (event) => {
+            console.log('✅ Chatbot Created!', event.detail);
+            alert(`Success!\n\nChat Link: ${event.detail.chatLink}\nPhone: ${event.detail.phoneNumber}`);
+        });
+
+        wizard.addEventListener('chatbot-close', () => {
+            console.log('❌ User closed the wizard');
+            alert('Wizard closed by user');
+        });
+    </script>
+</body>
+
+</html>

@@ -17,6 +17,7 @@ export default defineConfig(({ mode }) => {
         "process.env.NODE_ENV": '"production"',
       },
       build: {
+        cssCodeSplit: false,
         lib: {
           entry: resolve(__dirname, "src/web-component.tsx"),
           name: "ChatbotWizard",
@@ -31,12 +32,14 @@ export default defineConfig(({ mode }) => {
             inlineDynamicImports: true,
             // Single file output
             entryFileNames: "chatbot-wizard.js",
-            assetFileNames: "chatbot-wizard.[ext]",
+            assetFileNames: (assetInfo) => {
+              // Inline CSS into JS
+              if (assetInfo.name === "style.css") return "chatbot-wizard.css";
+              return "[name].[ext]";
+            },
             globals: {},
           },
         },
-        // Ensure CSS is extracted
-        cssCodeSplit: false,
         // Optimize for production
         minify: "terser",
         sourcemap: true,
