@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "buildDate": "2025-10-24T15:31:12.486Z",
+  "files": [
+    "chatbot-wizard.js",
+    "chatbot-wizard.css",
+    "chatbot-wizard.js.map"
+  ],
+  "size": {
+    "js": "197.65 KB",
+    "css": "12.00 KB"
+  }
+}

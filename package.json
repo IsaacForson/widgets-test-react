@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "tsc --noEmit --skipLibCheck && vite build",
     "build:webcomponent": "tsc --noEmit --skipLibCheck && vite build --mode webcomponent",
+    "package": "npm run build:webcomponent && node scripts/package.js",
+    "deploy:netlify": "npm run build:webcomponent && netlify deploy --prod --dir=dist",
     "lint": "eslint .",
     "preview": "vite preview"
   },
