@@ -182,7 +182,7 @@ const HomePage: React.FC = () => {
     <div className="bg-base-200 p-4">
       <div className=" mx-auto">
         {/* Header */}
-      {/*   <div className="text-center mb-8">
+        {/*   <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-base-content mb-2">
             🤖 Chatbot Builder
           </h1>
@@ -316,26 +316,15 @@ const HomePage: React.FC = () => {
                 {questions.map((question, index) => (
                   <div key={index} className="space-y-3">
                     <div className="flex items-start gap-3">
-                      <svg
-                        className="w-5 h-5 shrink-0 mt-1 text-primary"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
                       <div className="flex-1">
                         <label className="label">
                           <span className="label-text font-semibold text-black">
                             Question {index + 1}:
                           </span>
                         </label>
-                        <p className="text-base-content mb-3">{question}</p>
+                        <p className="text-base-content mb-3 text-sm">
+                          {question}
+                        </p>
                         <textarea
                           className="placeholder:text-gray-400 textarea border border-gray-200 h-20 text-base focus:outline-none focus:ring-0 w-full text-black text-sm resize-none !rounded-lg"
                           placeholder={`Your answer to question ${
@@ -464,7 +453,7 @@ const HomePage: React.FC = () => {
                       {chatbotDetails.chatLink}
                     </a>
                   </div>
-              </div>
+                </div>
 
                 {/* Phone Number */}
                 <div className="alert alert-success">
@@ -529,7 +518,7 @@ const HomePage: React.FC = () => {
               value={step === "slide1" ? 50 : 100}
               max="100"
             ></progress>
-        </div>
+          </div>
         )}
       </div>
     </div>
