@@ -20,8 +20,8 @@ export interface WidgetRecommendationResponse {
   flowDescription: string;
 }
 
-// const API_BASE_URL = "https://enhanced-experience-platform.onrender.com";
-const API_BASE_URL_LOCAL = "http://localhost:3000";
+const API_BASE_URL = "https://enhanced-experience-platform.onrender.com";
+// const API_BASE_URL_LOCAL = "http://localhost:3000";
 
 export class WidgetRecommendationService {
   static async getRecommendations(
@@ -29,7 +29,7 @@ export class WidgetRecommendationService {
   ): Promise<WidgetRecommendationResponse> {
     try {
       const response = await fetch(
-        `${API_BASE_URL_LOCAL}/api/widgets/recommend`,
+        `${API_BASE_URL}/api/widgets/recommend`,
         {
           method: "POST",
           headers: {
