@@ -13,6 +13,9 @@ export default defineConfig(({ mode }) => {
   if (mode === "webcomponent") {
     return {
       ...baseConfig,
+      define: {
+        "process.env.NODE_ENV": '"production"',
+      },
       build: {
         lib: {
           entry: resolve(__dirname, "src/web-component.tsx"),
