@@ -19,9 +19,27 @@ export interface ChatbotStep2Request {
 
 export interface ChatbotStep2Response {
   success: boolean;
+  chatbotId: string;
   message: string;
   chatLink: string;
   phoneNumber: string;
+  chatbotConfig?: {
+    id: string;
+    name: string;
+    description: string;
+    personality: string;
+    capabilities: string[];
+    conversationFlow: {
+      greeting: string;
+      commonQuestions: Array<{
+        question: string;
+        answer: string;
+      }>;
+      fallbackResponse: string;
+      escalationTriggers: string[];
+    };
+    createdAt: string;
+  };
 }
 
 const API_BASE_URL = "https://enhanced-experience-platform.onrender.com";
@@ -52,9 +70,7 @@ export class ChatbotWizardService {
       return data;
     } catch (error) {
       console.error("Error in Step 1:", error);
-      throw new Error(
-        "Failed to process your request. Please try again."
-      );
+      throw new Error("Failed to process your request. Please try again.");
     }
   }
 
@@ -83,10 +99,7 @@ export class ChatbotWizardService {
       return data;
     } catch (error) {
       console.error("Error in Step 2:", error);
-      throw new Error(
-        "Failed to generate chatbot. Please try again."
-      );
+      throw new Error("Failed to generate chatbot. Please try again.");
     }
   }
 }
-

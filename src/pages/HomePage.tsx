@@ -13,8 +13,16 @@ const HomePage: React.FC = () => {
   const [questions, setQuestions] = useState<string[]>([]);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [chatbotDetails, setChatbotDetails] = useState<{
+    chatbotId: string;
     chatLink: string;
     phoneNumber: string;
+    chatbotConfig?: {
+      id: string;
+      name: string;
+      description: string;
+      personality: string;
+      capabilities: string[];
+    };
   } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [recognition, setRecognition] = useState<any>(null);
@@ -156,8 +164,10 @@ const HomePage: React.FC = () => {
         combinedAnswers
       );
       setChatbotDetails({
+        chatbotId: result.chatbotId,
         chatLink: result.chatLink,
         phoneNumber: result.phoneNumber,
+        chatbotConfig: result.chatbotConfig,
       });
       setStep("complete");
     } catch (error) {
@@ -415,18 +425,21 @@ const HomePage: React.FC = () => {
 
         {/* Completion Screen */}
         {step === "complete" && chatbotDetails && (
-          <div className="card bg-base-100 ">
-            <div className="card-body items-center text-center">
-              <div className="text-6xl mb-4">🎉</div>
-              <h2 className="text-3xl font-bold mb-2 text-black">
-                Your Chatbot is Ready!
-              </h2>
-              <p className="text-base-content/70 mb-8">
-                Your chatbot has been successfully published. You can now start
-                using it!
-              </p>
+          <div className="card bg-base-100">
+            <div className="card-body">
+              <div className="text-center mb-6">
+                <div className="text-6xl mb-4">🎉</div>
+                <h2 className="text-3xl font-bold mb-2 text-black">
+                  Your Chatbot is Ready!
+                </h2>
+                <p className="text-base-content/70">
+                  Your chatbot has been successfully published. You can now
+                  start using it!
+                </p>
+              </div>
 
-              <div className="grid gap-4 w-full max-w-lg">
+              {/* Access Methods - Same Line */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 {/* Chat Link */}
                 <div className="alert alert-info">
                   <svg
@@ -448,7 +461,7 @@ const HomePage: React.FC = () => {
                       href={chatbotDetails.chatLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="link link-primary break-all"
+                      className="link link-primary break-all text-sm"
                     >
                       {chatbotDetails.chatLink}
                     </a>
@@ -478,6 +491,63 @@ const HomePage: React.FC = () => {
                   </div>
                 </div>
               </div>
+
+              {/* Chatbot Configuration Details */}
+              {chatbotDetails.chatbotConfig && (
+                <div className="space-y-4">
+                  <h3 className="text-xl font-bold text-black">
+                    Chatbot Details
+                  </h3>
+
+                  {/* Name & Description */}
+                  <div className="bg-base-200 p-4 rounded-lg">
+                    <h4 className="font-semibold text-black mb-2">
+                      {chatbotDetails.chatbotConfig.name}
+                    </h4>
+                    <p className="text-sm text-base-content/70">
+                      {chatbotDetails.chatbotConfig.description}
+                    </p>
+                  </div>
+
+                  {/* Personality */}
+                  <div
+                    className="my-4"
+                    style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                  >
+                    <h4 className="font-semibold text-black text-sm">
+                      Personality
+                    </h4>
+                    <p className="text-sm text-base-content/70">
+                      {chatbotDetails.chatbotConfig.personality}
+                    </p>
+                  </div>
+
+                  {/* Capabilities */}
+                  {chatbotDetails.chatbotConfig.capabilities &&
+                    chatbotDetails.chatbotConfig.capabilities.length > 0 && (
+                      <div className="mb-4">
+                        <h4 className="font-semibold text-black mb-2 text-sm">
+                          Capabilities
+                        </h4>
+                        <ul
+                          className="list-disc list-inside space-y-1"
+                          style={{ marginLeft: "13px" }}
+                        >
+                          {chatbotDetails.chatbotConfig.capabilities.map(
+                            (capability, idx) => (
+                              <li
+                                key={idx}
+                                className="text-sm text-base-content/70"
+                              >
+                                {capability}
+                              </li>
+                            )
+                          )}
+                        </ul>
+                      </div>
+                    )}
+                </div>
+              )}
 
               <div className="card-actions mt-8">
                 <Button
